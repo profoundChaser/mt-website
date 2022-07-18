@@ -1,25 +1,35 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <Head v-if="!hiddenHead"></Head>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
+import Head from './components/header/Head.vue'
 
 export default {
   name: 'App',
   components: {
-  }
+    Head,
+  },
+  data() {
+    return {
+      hiddenHead: false,
+      checkPaths: ['/login', '/register'],
+    }
+  },
+  watch: {
+    '$route.path': function (newVal, oldVal) {
+      this.checkPath(newVal)
+    },
+  },
+  methods: {
+    checkPath(path) {
+      this.hiddenHead = this.checkPaths.includes(path)
+    },
+  },
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style></style>

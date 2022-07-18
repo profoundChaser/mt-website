@@ -1,0 +1,54 @@
+/* button{
+    font-size: 30px;
+    font-weight: 700;
+    outline: none;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    color: pink;
+    cursor: pointer;
+ }
+ 
+ button:hover{
+    background: pink;
+    color: white;
+ }
+
+ .icon-box{
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    border-radius: 20px;
+    transform-origin: center;
+    background: #fff;
+    color: pink;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0.3px 0.4px 1.2px rgba(0, 0, 0, 0.023), 0.8px 0.8px 2.7px rgba(0, 0, 0, 0.034),
+      1.3px 1.4px 4.6px rgba(0, 0, 0, 0.042), 1.9px 2.1px 6.9px rgba(0, 0, 0, 0.049),
+      2.8px 3px 10px rgba(0, 0, 0, 0.055), 3.9px 4.3px 14.2px rgba(0, 0, 0, 0.061),
+      5.5px 6px 20.1px rgba(0, 0, 0, 0.068), 8px 8.8px 29.2px rgba(0, 0, 0, 0.076),
+      12.4px 13.5px 45px rgba(0, 0, 0, 0.087), 22px 24px 80px rgba(0, 0, 0, 0.11);
+ }
+
+ .icon-box:hover{
+    background: pink;
+    color: #fff;
+ } */
+
+.mt10{
+    margin-top: 10px;
+}
+.ml10{
+    margin-left: 10px;
+}
+.mr10{
+    margin-right: 10px;
+}
+.mb10{
+    margin-bottom: 10px;
+}
