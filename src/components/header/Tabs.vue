@@ -30,17 +30,14 @@ export default {
       curPath: null,
     }
   },
-  // watch: {
-  //   '$route.path': function (newVal, oldVal) {
-  //   },
-  // },
   methods: {
     toUrl(path, i) {
+      this.lastIndex = this.activeIndex
       this.activeIndex = i
-      if (this.curPath === path) return
-      this.curPath = path
+      if (this.lastIndex == this.activeIndex) return
       this.moveLine()
       this.$router.push(path)
+      sessionStorage.setItem('activePathIndex', i)
     },
     moveLine() {
       const offset = this.activeIndex
@@ -48,22 +45,13 @@ export default {
         (this.line.clientWidth + this.line.offsetLeft) * offset
       }px)`
     },
-    // checkURL() {
-    //   if (location.href.indexOf(this.curPath) !== -1) {
-    //     const hrefs = location.href.split('/')
-    //     this.curPath = '/' + hrefs[hrefs.length - 1]
-    //     this.tabs.forEach((item, index) => {
-    //       if (item.path === this.curPath) {
-    //         console.log(this.activeIndex)
-    //         this.activeIndex = index
-    //         console.log(this.activeIndex)
-    //       }
-    //     })
-    //   }
-    // },
+  },
+  created() {
+    this.activeIndex = +sessionStorage.getItem('activePathIndex')
   },
   mounted() {
     this.line = this.$refs.line
+    this.moveLine()
   },
 }
 </script>
@@ -96,7 +84,7 @@ export default {
     height: 3px;
     background: #3bc66f;
     position: absolute;
-    top: 145%;
+    top: 146%;
     left: 20px;
     transition: all 0.2s linear;
   }

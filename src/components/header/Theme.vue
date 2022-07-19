@@ -1,9 +1,9 @@
 <template>
   <div class="theme-box ml10" @click="changeTheme" ref="themeBox">
-    <div class="icon-box sun" v-if="isLight">
+    <div class="iconbox sun" v-if="isLight">
       <i class="el-icon-sunny"></i>
     </div>
-    <div class="icon-box moon" v-else>
+    <div class="iconbox moon" v-else>
       <i class="el-icon-moon"></i>
     </div>
   </div>
@@ -41,7 +41,7 @@ export default {
   box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.4);
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgb(159, 158, 158);
-  .icon-box {
+  .iconbox {
     display: flex;
     width: 24px;
     height: 24px;

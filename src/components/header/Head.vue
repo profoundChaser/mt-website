@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="logo">
-      <img src="" alt="logo" />
+      <img src="../../assets/logo.png" alt="logo" style="width: 40px" />
     </div>
     <Search></Search>
     <Tabs :tabs="tabs"></Tabs>
@@ -17,7 +17,7 @@
       <span class="slash ml10">/</span>
       <button class="register-btn ml10" @click="register">注册</button>
     </div>
-    <Theme></Theme>
+    <Theme id="theme"></Theme>
     <Lang></Lang>
   </div>
 </template>
@@ -37,15 +37,20 @@ export default {
           path: '/home',
         },
         {
+          id: 2,
+          name: '素材',
+          path: '/imgs',
+        },
+        {
           id: 1,
           name: '我的',
           path: '/me',
         },
         {
-          id: 2,
-          name: 'xx',
-          path: '/xx',
-        },
+          id:3,
+          name: '社区',
+          path: '/comment',
+        }
       ],
       isLogin: false,
       isLight: false,
@@ -69,6 +74,10 @@ export default {
   padding: 10px;
   background: #fff;
   display: flex;
+  /* position: fixed;
+  top: 0;
+  left: 0;
+  z-index:10000; */
   align-items: center;
   border-bottom: 1px solid rgb(214, 213, 213);
   box-shadow: 0px 2.2px 2.2px rgba(0, 0, 0, 0.014), 0px 5.4px 5.3px rgba(0, 0, 0, 0.02),
@@ -83,6 +92,10 @@ export default {
         color: #3bc66f;
       }
     }
+  }
+
+  #theme {
+    margin-left: 80px;
   }
 }
 

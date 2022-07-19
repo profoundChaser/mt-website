@@ -14,16 +14,16 @@
  button:hover{
     background: pink;
     color: white;
- }
+ } */
 
  .icon-box{
     width: 50px;
     height: 50px;
     font-size: 30px;
-    border-radius: 20px;
+    border-radius: 10px;
     transform-origin: center;
     background: #fff;
-    color: pink;
+    color: #74f3a2;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -33,12 +33,13 @@
       2.8px 3px 10px rgba(0, 0, 0, 0.055), 3.9px 4.3px 14.2px rgba(0, 0, 0, 0.061),
       5.5px 6px 20.1px rgba(0, 0, 0, 0.068), 8px 8.8px 29.2px rgba(0, 0, 0, 0.076),
       12.4px 13.5px 45px rgba(0, 0, 0, 0.087), 22px 24px 80px rgba(0, 0, 0, 0.11);
- }
+    transition: all .2s linear;
+}
 
  .icon-box:hover{
-    background: pink;
+    background: #74f3a2;
     color: #fff;
- } */
+ }
 
 .mt10{
     margin-top: 10px;

@@ -11,7 +11,9 @@ import {
     DropdownItem,
     Form,
     FormItem,
-    Input
+    Input,
+    Breadcrumb,
+    BreadcrumbItem
 } from "element-ui";
 
 Vue.use(Button)
@@ -24,6 +26,8 @@ Vue.use(Button)
     .use(Form)
     .use(FormItem)
     .use(Input)
+    .use(Breadcrumb)
+    .use(BreadcrumbItem)
     .use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message=Message

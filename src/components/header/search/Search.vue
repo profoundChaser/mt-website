@@ -1,6 +1,6 @@
 <template>
   <div id="search-box" class="ml10">
-    <div class="icon-box" ref="searchIcon">
+    <div class="iconbox" ref="searchIcon">
       <i class="el-icon-search"></i>
     </div>
     <input
@@ -12,7 +12,7 @@
       @focus="controlIconStyle"
       @blur="restoreIconStyle"
     />
-    <div class="icon-box">
+    <div class="iconbox">
       <i class="el-icon-upload"></i>
     </div>
   </div>
@@ -46,7 +46,7 @@ export default {
 <style lang="scss" scoped>
 #search-box {
   position: relative;
-  width: 769px;
+  width: 670px;
   display: flex;
   #search-input {
     min-width: 300px;
@@ -66,7 +66,7 @@ export default {
       border-top: 1px solid #3bc66f;
       border-bottom: 1px solid #3bc66f;
     }
-    &:focus ~ .icon-box {
+    &:focus ~ .iconbox {
       background: #fff;
       border-width: 1px 1px 1px 0;
       border-color: #3bc66f;
@@ -74,7 +74,7 @@ export default {
     }
   }
 
-  .icon-box {
+  .iconbox {
     width: 45px;
     height: 38px;
     background: rgb(231, 231, 231);

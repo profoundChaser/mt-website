@@ -8,17 +8,17 @@
  /*滚动条里面轨道*/
  ::-webkit-scrollbar-track {
     background: #f6f6f6;
-    border-radius: 2px;
+    /* border-radius: 2px; */
  }
  
  /*滚动条里面小方块*/
  ::-webkit-scrollbar-thumb {
     background: #dddcdc;
-    border-radius: 5px;
+    /* border-radius: 5px; */
  }
  
  ::-webkit-scrollbar-thumb:hover {
-    background:rgb(231, 103, 118);
+    background:#3bc66f;
  }
  
  ::-webkit-scrollbar-corner {

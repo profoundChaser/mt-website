@@ -1,11 +1,17 @@
 import VueRouter from 'vue-router'
+//进度条配置
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+import nProgress from 'nprogress'
+import Login from '../views/login/Login.vue'
+NProgress.configure({ showSpinner: false })
 const router = new VueRouter({
   mode: 'history',
   routes: [
     {
         path: '/login',
         name: 'login',
-        component: () => import('../views/login/Login.vue'),
+        component: Login,
         meta: {
           title: '登录',
         },
@@ -39,11 +45,31 @@ const router = new VueRouter({
         },
         component: () => import('../views/me/Me.vue'),
       },
+      {
+        path:'/onePic',
+        name:'onePic',
+        meta:{
+          title:'图片',
+        },
+        component:()=>import('../views/onepic/OnePic.vue')
+      },
+      {
+        path:'/imgs',
+        name:'imgs',
+        meta:{
+          title:'图片大全',
+        },
+        component:()=>import('../views/imgs/CategoryImgsAll.vue')
+      }
   ],
 })
-
+router.beforeEach((to,from,next)=>{
+  NProgress.start()
+  next()
+})
 router.afterEach((to, from) => {
   document.title = to.meta.title
+  NProgress.done()
 })
 
 export default router
