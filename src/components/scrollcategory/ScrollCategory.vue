@@ -1,7 +1,8 @@
 <template>
   <div id="scroll-container">
     <div id="scroll-box" ref="scrollBox">
-      <div class="img-box" v-for="item in scrollImgs" :key="item.id">
+      <div class="img-box" v-for="item in scrollImgs" :key="item.id"
+      @click="selectCategory(item.path)">
         <img :src="item.img" alt="图片" />
         <p class="center-text">{{ item.text }}</p>
         <div class="mask"></div>
@@ -18,13 +19,20 @@ export default {
     return {
       scrollImgs: [
         {
+          id: -1,
+          text: '全部',
+          img: 'https://images.unsplash.com/photo-1536599018102-9f803c140fc1?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
+        },
+        {
           id: 0,
           text: '风景',
+          path:'/scenery',
           img: 'https://images.unsplash.com/photo-1536599018102-9f803c140fc1?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
         },
         {
           id: 1,
           text: '美女',
+          path:'/mv',
           img: 'https://images.unsplash.com/photo-1448387473223-5c37445527e7?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
         },
         {
@@ -73,7 +81,8 @@ export default {
       // pre:null,
       // next:null,
       marginLeft:null, //图片容器的左边距 用于计算transform
-      clientWidth:null //图片容器的宽度 用于计算transform
+      clientWidth:null, //图片容器的宽度 用于计算transform
+      commonPath:'/imgs'
     }
   },
   methods: {
@@ -101,6 +110,11 @@ export default {
         this.pre.style.display = 'flex'
       }
     },
+    //选中后通知父组件更换图片
+    selectCategory(path){
+        this.$router.push(this.commonPath+path)
+        this.$emit('showPathImgs',path)
+    }
   },
   mounted() {
     this.scrollBox = this.$refs.scrollBox
@@ -170,7 +184,7 @@ export default {
     width: 60px;
     height: 100%;
     position: absolute;
-    color: rgb(84, 84, 84);
+    color: #626161;
     box-shadow: none;
     background: linear-gradient(to right, #fff, transparent);
     border-radius: 0;

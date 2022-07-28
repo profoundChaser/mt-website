@@ -34,6 +34,7 @@
           </div>
         </div>
       </div>
+        <slot></slot>
     </div>
     <!-- 预览遮罩 -->
     <template v-if="usePreView">
@@ -45,9 +46,6 @@
         <button class="icon-box next" @click="next">&gt;</button>
       </div>
     </template>
-    <div class="loading-bar">
-      <img src="../../assets/gif/loading2.gif" alt="" style="width:30px;">
-    </div>
   </div>
 </template>
 <script>
@@ -101,7 +99,7 @@ export default {
     },
     closePreview() {
       this.showPreView = false
-      document.body.style.overflow = 'auto'
+      document.body.style.overflowY = 'auto'
     },
     openNewWindow(src) {
       newWindow('/onePic')
@@ -109,7 +107,6 @@ export default {
       localStorage.setItem('imgSrc', src)
     },
     checkWindowScroll() {
-      const imgIndex = this.$refs.imgIndex
       window.addEventListener(
         'scroll',
         debounce(() => {
@@ -152,14 +149,15 @@ export default {
     },
     waterFall(cols) {
       const boxes = this.$refs.box
+      const width = 1350
       if (!boxes) return
       let divideWidth = null
       const offsetLeft = 10
       const column = cols
       if (column <= 4) {
-        divideWidth = this.width - offsetLeft * (column + 2)
+        divideWidth = width - offsetLeft * (column + 2)
       } else {
-        divideWidth = this.width - offsetLeft * (column + 1)
+        divideWidth = width - offsetLeft * (column + 1)
       }
       for (let i = 0; i < boxes.length; i++) {
         boxes[i].style.width = divideWidth / column + 'px'
@@ -189,6 +187,7 @@ export default {
             'px'
         }
       }
+      this.$forceUpdate()
     },
     //收藏
     store(e, item, i) {
@@ -232,17 +231,17 @@ export default {
     },
   },
   mounted() {
-    this.width = this.$refs.imgIndex.clientWidth
     this.initImg()
+    this.width = this.$refs.imgIndex.clientWidth
     this.waterFall(this.waterFallSize)
     this.checkWindowScroll(this.waterFallSize)
-    window.addEventListener('resize', this.waterFall(this.waterFallSize))
+    // window.addEventListener('resize', this.waterFall(this.waterFallSize))
     //初始化下载的列表
     localStorage.setItem('downloadFiles', JSON.stringify([]))
   },
   destroyed() {
     window.removeEventListener('scroll', debounce)
-    window.removeEventListener('resize', this.waterFall(this.waterFallSize))
+    // window.removeEventListener('resize', this.waterFall(this.waterFallSize))
     clearTimeout(this.timer)
   },
 }
@@ -389,7 +388,7 @@ video {
   border-radius: 10px;
 }
 
-.loading-bar{
+.loading-bar {
   position: absolute;
   bottom: 0;
   left: 0;

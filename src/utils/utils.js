@@ -64,6 +64,9 @@ export const getRdNum = function (min, max) {
   return ~~(Math.random() * (max - min) + min)
 }
 
+export const createColor = function () {
+  return `rgb(${getRdNum(100, 255)}, ${getRdNum(100, 255)}, ${getRdNum(100, 255)})`
+}
 //数组转树状结构
 export const arrayToTree = function (items) {
   const result = [] // 存放结果集
@@ -128,7 +131,18 @@ export function swap(arr, a, b) {
 }
 
 //重定向到某个页面
-export const redirect = url => location.href = url
+export const redirect = (url) => (location.href = url)
 
 //打开新窗口
-export const newWindow= url => window.open(url)
+export const newWindow = (url) => window.open(url)
+
+//可中断的循环
+export const abortForEach = (arr, cb) => {
+  try {
+    arr.forEach((item, index) => {
+      cb(item, index)
+    })
+  } catch (error) {
+    return error
+  }
+}

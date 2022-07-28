@@ -2,31 +2,30 @@
   <div id="login-index">
     <div class="login-content">
       <el-form
-        :model="ruleForm"
+        :model="user"
         status-icon
         :rules="rules"
-        ref="ruleForm"
+        ref="user"
         label-width="100px"
         class="demo-ruleForm"
         :label-position="labelPosition"
       >
         <el-form-item label="邮箱" prop="email">
-          <el-input type="email" v-model="ruleForm.email" autocomplete="off"></el-input>
+          <el-input type="email" v-model="user.email" autocomplete="off"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="用户名" prop="username">
-          <el-input type="text" v-model="ruleForm.username" autocomplete="off"></el-input>
-        </el-form-item> -->
         <el-form-item label="密码" prop="pwd">
-          <el-input type="password" v-model="ruleForm.pwd" autocomplete="off"></el-input>
+          <el-input type="password" v-model="user.pwd" autocomplete="off"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="确认密码" prop="checkPwd">
-          <el-input type="password" v-model="ruleForm.checkPwd" autocomplete="off"></el-input>
-        </el-form-item> -->
+        <div class="navigator-bar">
+          <button class="forget" @click="toPwd">忘记密码?</button>
+          <button class="to-register" @click="toRegister">注册</button>
+        </div>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')" id="login-btn">登录</el-button>
+          <el-button type="primary" @click="submitForm('user')" id="login-btn">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
+    <hua-kuai v-if="verifyVisible" @verify="verify" id="huakuai"></hua-kuai>
     <div class="panel"></div>
     <div class="circle"></div>
     <div class="rect"></div>
@@ -34,25 +33,66 @@
 </template>
 
 <script>
+import { login } from '@/api/user'
 export default {
   data() {
+    // var validateEmail = (rule, value, callback) => {
+    //   if (value === '') {
+    //     callback(new Error('邮箱不能为空'))
+    //   } else {
+    //     const regex = /^(?:\w+\.?)\w+@(?:\w+\.)+\w+$/
+    //     if (regex.test(value)) {
+    //       this.$refs.user.validateField('email')
+    //     } else {
+    //       callback(new Error('请输入正确的邮箱格式'))
+    //     }
+    //     callback()
+    //   }
+    // }
     return {
       labelPosition: 'top',
-      ruleForm: {
-        pwd: null,
-        checkPwd: null,
-        username: null,
+      user: {
         email: null,
+        pwd: null,
       },
+      rules: {
+        email: [
+          // {
+          //   validator: validateEmail,
+          //   trigger: 'blur',
+          //   required: true,
+          // },
+        ],
+        pwd: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
+      },
+      verifyVisible: false,
     }
   },
   methods: {
+    openVerify() {
+      this.verifyVisible = true
+    },
+    verify(result) {
+      if (result) {
+        this.login()
+        this.verifyVisible = false
+      }
+    },
+    async login() {
+      const res = await login({
+        email: this.user.email,
+        password: this.user.pwd,
+      })
+      if (res.status !== 200) return this.$message.error(res.msg)
+      localStorage.setItem('token',res.data.Token)
+      this.$message.success(res.msg)
+      this.$router.push('/home')
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
+          this.openVerify()
         } else {
-          console.log('error submit!!')
           return false
         }
       })
@@ -60,11 +100,39 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
+    toPwd() {},
+    toRegister() {
+      this.$router.push('/register')
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.navigator-bar {
+  display: flex;
+  justify-content: space-between;
+  button {
+    color: #fff;
+    opacity: 0.5;
+    transition: all 0.1s linear;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .forget {
+    &:hover {
+      color: #3bc66f;
+      opacity: 1;
+    }
+  }
+  .to-register {
+    &:hover {
+      color: rgb(240, 181, 73);
+      opacity: 1;
+    }
+  }
+}
 #login-index {
   display: flex;
   justify-content: center;
@@ -78,6 +146,13 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 100;
+  }
+  .huakuai{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
     z-index: 100;
   }
   .panel {
@@ -112,8 +187,6 @@ export default {
     position: absolute;
     right: 400px;
     bottom: 150px;
-    /* top:0;
-    left:0; */
     background: linear-gradient(to top left, rgba(135, 116, 249, 0.9), rgba(75, 162, 237, 0.9));
     border-radius: 20px;
     z-index: 1;
@@ -135,6 +208,9 @@ export default {
   background: #3bc66f;
   border: none;
   margin-top: 10px;
+  &:hover {
+    background: #53da84;
+  }
 }
 
 @keyframes rotate {

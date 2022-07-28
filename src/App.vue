@@ -2,7 +2,7 @@
   <div id="app">
     <Head v-if="!hiddenHead"></Head>
     <router-view></router-view>
-    <ToolBar v-if="!hiddenHead"></ToolBar>
+    <ToolBar v-if="!hiddenToolBar"></ToolBar>
   </div>
 </template>
 
@@ -19,22 +19,23 @@ export default {
   data() {
     return {
       hiddenHead: false,
-      checkPaths: ['/login', '/register', '/onePic','/'],
+      hiddenToolBar: false,
+      checkPaths: ['/login', '/register', '/onePic', '/', '/404'],
+      checkToolbarHiddens: ['/me', '/login', '/register', '/onePic', '/', '/404'],
     }
   },
   watch: {
     '$route.path': {
       handler: function (newValue, oldValue) {
         this.checkPath(newValue)
-        console.log(newValue)
       },
       immediate: true,
     },
   },
   methods: {
     checkPath(path) {
-      console.log(this.checkPaths.includes(path))
       this.hiddenHead = this.checkPaths.includes(path)
+      this.hiddenToolBar = this.checkToolbarHiddens.includes(path)
     },
   },
   beforeCreate() {

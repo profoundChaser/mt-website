@@ -13,7 +13,20 @@ import {
     FormItem,
     Input,
     Breadcrumb,
-    BreadcrumbItem
+    BreadcrumbItem,
+    Container,
+    Aside,
+    Main,
+    Menu,
+    MenuItem,
+    Submenu,
+    Radio,
+    RadioGroup,
+    Row,
+    Col,
+    Dialog,
+    Upload,
+    Card
 } from "element-ui";
 
 Vue.use(Button)
@@ -28,6 +41,19 @@ Vue.use(Button)
     .use(Input)
     .use(Breadcrumb)
     .use(BreadcrumbItem)
+    .use(Container)
+    .use(Aside)
+    .use(Main)
+    .use(Menu)
+    .use(MenuItem)
+    .use(Submenu)
+    .use(Radio)
+    .use(RadioGroup)
+    .use(Col)
+    .use(Row)
+    .use(Dialog)
+    .use(Upload)
+    .use(Card)
     .use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message=Message

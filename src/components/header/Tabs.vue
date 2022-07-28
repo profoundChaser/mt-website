@@ -30,6 +30,23 @@ export default {
       curPath: null,
     }
   },
+  watch: {
+    '$route.path': {
+      handler(nv, ov) {
+        try {
+          this.tabs.forEach((item, index) => {
+            if (item.path === nv) {
+              this.lastIndex = +sessionStorage.getItem('activePathIndex')
+              this.activeIndex = index
+              sessionStorage.setItem('activePathIndex', index)
+              throw 'over'
+            }
+          })
+        } catch (error) {}
+      },
+      immediate: true,
+    },
+  },
   methods: {
     toUrl(path, i) {
       this.lastIndex = this.activeIndex
@@ -41,7 +58,7 @@ export default {
     },
     moveLine() {
       const offset = this.activeIndex
-      this.line.style.transform = `translateX(${
+      this.line.style.transform =`translateX(${
         (this.line.clientWidth + this.line.offsetLeft) * offset
       }px)`
     },

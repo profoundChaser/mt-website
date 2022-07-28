@@ -4,8 +4,9 @@
     <main>
       <div class="content">
         <TextContent :title="textContent.title" :content="textContent.content"></TextContent>
+        sandbox="allow-downloads"></iframe>
         <section class="image-section">
-          <h2>在Unsplash上浏览数千张免费图片</h2>
+          <h2>在Vein上浏览数千张免费图片</h2>
           <div class="img-row">
             <div class="img-big-box" v-for="item in rowImgs" :key="item.id">
               <div class="img-box">
@@ -18,7 +19,7 @@
           </div>
         </section>
         <section class="waterfall-section">
-          <h2>免费高分辨率UnFlash照片</h2>
+          <h2>免费高分辨率Vein照片</h2>
           <water-fall
             :pics="readyPics.slice(0, waterFallSize)"
             :waterFallSize="waterFallSize"
@@ -64,7 +65,7 @@ export default {
       readyPics: [],
       textContent: {
         title: '探索更多的优质图片',
-        content: ' Unsplash有超过一百万张免费的高分辨率照片。在Unsplash上探索这些流行的照片类别。在Unsplash许可下，可以免费下载和使用此处的所有照片。',
+        content: ' Vein有超过一百万张免费的高分辨率照片。在Vein上探索这些流行的照片类别。在Vein许可下，可以免费下载和使用此处的所有照片。',
       },
     }
   },

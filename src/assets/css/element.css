@@ -20,3 +20,21 @@
   为了使得文字在loading图下面
    margin:85px 0px; 
 } */
+
+.el-radio__input.is-checked .el-radio__inner{
+   border-color: #3bc66f !important;
+    background: #3bc66f !important;
+}
+.el-radio__input.is-checked+.el-radio__label{
+   color:#3bc66f !important;
+}
+
+.el-input__inner:focus{
+      border-color: #3bc66f !important;
+      outline: 0 !important;
+}
+
+.el-input__inner:hover{
+   border-color: #3bc66f !important;
+   outline: 0 !important;
+}
