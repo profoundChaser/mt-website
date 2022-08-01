@@ -58,32 +58,42 @@
 
 <script>
 import ICountUp from 'vue-countup-v2'
-import { register,home} from '@/api/user'
+import { register, home } from '@/api/user'
 export default {
   components: {
     ICountUp,
   },
   data() {
-    // var validatePass = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请输入密码'))
-    //   } else {
-    //     if (this.user.pwd !== '') {
-    //       this.$refs.user.validateField('pwd')
-    //     }
-    //     callback()
-    //   }
-    // }
-    // var validatePass2 = (rule, value, callback) => {
-    //   console.log(value)
-    //   if (value=== '') {
-    //     callback(new Error('请再次输入密码'))
-    //   } else if (value !== this.user.pwd) {
-    //     callback(new Error('两次输入密码不一致!'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
+    var validateEmail = (rule, value, callback) => {
+      const regex = /^(?:\w+\.?)\w+@(?:\w+\.)+\w+$/
+      if (value == '') {
+        callback(new Error('邮箱不能为空'))
+      } else if (regex.test(value)) {
+        callback()
+      } else {
+        callback(new Error('请输入正确的邮箱格式'))
+      }
+    }
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.user.pwd !== '') {
+          this.$refs.user.validateField('pwd')
+        }
+        callback()
+      }
+    }
+    var validatePass2 = (rule, value, callback) => {
+      console.log(value)
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.user.pwd) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       labelPosition: 'top',
       user: {
@@ -95,17 +105,28 @@ export default {
       },
       endVal: 4082318,
       rules: {
-        pwd: [
-          // {
-          //   validator: validatePass,
-          //   trigger: 'blur',
-          // },
+        email: [
+          {
+            validator: validateEmail,
+            trigger: 'blur',
+            required: true,
+          },
         ],
+        username:[{ required: true, message: '用户名不能为空', trigger: 'blur' }],
+        pwd: [
+          {
+            validator: validatePass,
+            trigger: 'blur',
+            required: true,
+          },
+        ],
+        
         checkPwd: [
-          // {
-          //   validator: validatePass2,
-          //   trigger: 'blur',
-          // },
+          {
+            validator: validatePass2,
+            trigger: 'blur',
+            required: true,
+          },
         ],
       },
       options: {
@@ -131,7 +152,6 @@ export default {
         password: this.user.pwd,
         sex: this.user.sex,
       })
-      console.log(res)
       if (res.status !== 200) return
     },
   },

@@ -11,10 +11,11 @@
         :label-position="labelPosition"
       >
         <el-form-item label="邮箱" prop="email">
-          <el-input type="email" v-model="user.email" autocomplete="off"></el-input>
+          <el-input type="email" v-model="user.email"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pwd">
-          <el-input type="password" v-model="user.pwd" autocomplete="off"></el-input>
+          <el-input type="password" v-model="user.pwd"></el-input>
+          <!-- autocomplete="off" -->
         </el-form-item>
         <div class="navigator-bar">
           <button class="forget" @click="toPwd">忘记密码?</button>
@@ -25,7 +26,9 @@
         </el-form-item>
       </el-form>
     </div>
-    <hua-kuai v-if="verifyVisible" @verify="verify" id="huakuai"></hua-kuai>
+    <div class="verify-box" v-if="verifyVisible">
+      <hua-kuai @verify="verify" id="huakuai"></hua-kuai>
+    </div>
     <div class="panel"></div>
     <div class="circle"></div>
     <div class="rect"></div>
@@ -34,21 +37,21 @@
 
 <script>
 import { login } from '@/api/user'
+import { mapMutations } from 'vuex'
+import { getStore, setStore } from '@/utils/utils'
+import { getAllCategories } from '@/api/category'
 export default {
   data() {
-    // var validateEmail = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('邮箱不能为空'))
-    //   } else {
-    //     const regex = /^(?:\w+\.?)\w+@(?:\w+\.)+\w+$/
-    //     if (regex.test(value)) {
-    //       this.$refs.user.validateField('email')
-    //     } else {
-    //       callback(new Error('请输入正确的邮箱格式'))
-    //     }
-    //     callback()
-    //   }
-    // }
+    var validateEmail = (rule, value, callback) => {
+      const regex = /^(?:\w+\.?)\w+@(?:\w+\.)+\w+$/
+      if (value == '') {
+        callback(new Error('邮箱不能为空'))
+      } else if (regex.test(value)) {
+        callback()
+      } else {
+        callback(new Error('请输入正确的邮箱格式'))
+      }
+    }
     return {
       labelPosition: 'top',
       user: {
@@ -57,11 +60,11 @@ export default {
       },
       rules: {
         email: [
-          // {
-          //   validator: validateEmail,
-          //   trigger: 'blur',
-          //   required: true,
-          // },
+          {
+            validator: validateEmail,
+            trigger: 'blur',
+            required: true,
+          },
         ],
         pwd: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
       },
@@ -84,8 +87,15 @@ export default {
         password: this.user.pwd,
       })
       if (res.status !== 200) return this.$message.error(res.msg)
-      localStorage.setItem('token',res.data.Token)
+      localStorage.setItem('token', res.Token)
+      localStorage.setItem('userInfo', JSON.stringify(res.data))
+      //存储用户信息
+      // this.storeUserInfo(res.data)
       this.$message.success(res.msg)
+      //在登录的时候获取图片分类
+      const res2 = await getAllCategories()
+      if (res2.status !== 200) return
+      localStorage.setItem('categories', JSON.stringify(res2.data))
       this.$router.push('/home')
     },
     submitForm(formName) {
@@ -100,10 +110,17 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    toPwd() {},
+    toPwd() {
+      this.$router.push('/forgetPwd')
+    },
     toRegister() {
       this.$router.push('/register')
     },
+    //store处理方法
+    // storeUserInfo(userInfo) {
+    //   this.$store.commit('STORE_USERINFO',userInfo)
+    // },
+    // ...mapMutations('userStore', { storeUserInfo: 'STORE_USERINFO' }),
   },
 }
 </script>
@@ -148,12 +165,19 @@ export default {
     transform: translate(-50%, -50%);
     z-index: 100;
   }
-  .huakuai{
+  .verify-box {
     position: absolute;
+    width: 100%;
+    height: 100vh;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     z-index: 100;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .panel {
     position: absolute;

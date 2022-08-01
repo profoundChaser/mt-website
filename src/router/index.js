@@ -5,7 +5,6 @@ import 'nprogress/nprogress.css'
 import nProgress from 'nprogress'
 import Login from '../views/login/Login.vue'
 NProgress.configure({ showSpinner: false })
-
 const imgRouter = ['mv', 'scenery']
 const router = new VueRouter({
   mode: 'history',
@@ -45,23 +44,23 @@ const router = new VueRouter({
         title: '我的',
       },
       component: () => import('../views/me/Me.vue'),
-      redirect:'/me/info',
-      children:[
+      redirect: '/me/info',
+      children: [
         {
-          path:'/me/info',
-          meta:{
-            title:'个人信息'
+          path: '/me/info',
+          meta: {
+            title: '个人信息',
           },
-          component:()=>import('../views/me/child/userInfo/Index.vue')
+          component: () => import('../views/me/child/userInfo/Index.vue'),
         },
         {
-          path:'/me/friends',
-          meta:{
-            title:'好友聊天'
+          path: '/me/friends',
+          meta: {
+            title: '好友聊天',
           },
-          component:()=>import('../views/me/child/friends/Chat.vue')
-        }
-      ]
+          component: () => import('../views/me/child/friends/Chat.vue'),
+        },
+      ],
     },
     {
       path: '/onePic',
@@ -98,15 +97,33 @@ const router = new VueRouter({
       ],
     },
     {
+      path: '/forgetPwd',
+      name: '/forgetPwd',
+      meta: {
+        title: '重置密码',
+      },
+      component: () => import('../views/forgetPwd/ForgetPwd.vue'),
+    },
+    {
+      path: '/upload',
+      name: '/upload',
+      meta: {
+        title: '文件上传',
+      },
+      component: () => import('../views/upload/Upload.vue'),
+    },
+    {
       path: '/404',
       name: '404',
+      meta: {
+        title: '错误访问',
+      },
       component: () => import('../views/error/404.vue'),
     },
   ],
 })
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  console.log(to)
   if (to.matched.length == 0) {
     router.push('/404')
   }

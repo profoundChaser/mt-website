@@ -20,8 +20,8 @@ export default {
     return {
       hiddenHead: false,
       hiddenToolBar: false,
-      checkPaths: ['/login', '/register', '/onePic', '/', '/404'],
-      checkToolbarHiddens: ['/me', '/login', '/register', '/onePic', '/', '/404'],
+      checkPaths: ['/login', '/register', '/onePic', '/', '/404', '/forgetPwd','/upload'],
+      checkToolbarHiddens: ['/me', '/login', '/register', '/onePic', '/', '/404', '/forgetPwd','/upload'],
     }
   },
   watch: {
@@ -35,7 +35,8 @@ export default {
   methods: {
     checkPath(path) {
       this.hiddenHead = this.checkPaths.includes(path)
-      this.hiddenToolBar = this.checkToolbarHiddens.includes(path)
+      let paths = path.split('/')
+      this.hiddenToolBar = this.checkToolbarHiddens.includes('/' + paths[1])
     },
   },
   beforeCreate() {

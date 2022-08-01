@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="options.img" @click="editCropper()" title="点击上传头像" class="img-circle img-lg" />
+    <img :src="img" @click="editCropper()" title="点击上传头像" class="img-circle img-lg" />
     <el-dialog
       :title="title"
       :visible.sync="open"
@@ -72,6 +72,9 @@ export default {
     user: {
       type: Object,
     },
+    img: {
+      type: String,
+    },
   },
   data() {
     return {
@@ -82,7 +85,7 @@ export default {
       // 弹出层标题
       title: '修改头像',
       options: {
-        img: require('../../../../assets/img/scenery/will-turner-GTPT_fNFQiE-vein.jpg'), //裁剪图片的地址
+        img: JSON.parse(localStorage.getItem('userInfo')).avatar, //裁剪图片的地址
         autoCrop: true, // 是否默认生成截图框
         autoCropWidth: 200, // 默认生成截图框宽度
         autoCropHeight: 200, // 默认生成截图框高度
@@ -146,9 +149,11 @@ export default {
     },
     // 实时预览
     realTime(data) {
-      console.log(data)
       this.previews = data
     },
+  },
+  created() {
+    //获取头像
   },
 }
 </script>

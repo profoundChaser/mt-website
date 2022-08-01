@@ -114,3 +114,8 @@ export function downloadMoreWidthZip(...urls) {
     FileSaver.saveAs(content, 'mv.zip')
   })
 }
+
+
+export function uploadFile(){
+  
+}

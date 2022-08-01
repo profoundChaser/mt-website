@@ -146,3 +146,19 @@ export const abortForEach = (arr, cb) => {
     return error
   }
 }
+
+export const setStore = function (type, key, val) {
+  if (type === 'local') {
+    localStorage.setItem(key, val)
+  } else {
+    sessionStorage.setItem(ley, val)
+  }
+}
+
+export const getStore = function (type, key) {
+  if (type === 'local') {
+    localStorage.getItem(key)
+  } else {
+    sessionStorage.getItem(ley)
+  }
+}

@@ -16,6 +16,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     tabs: {
@@ -58,7 +59,7 @@ export default {
     },
     moveLine() {
       const offset = this.activeIndex
-      this.line.style.transform =`translateX(${
+      this.line.style.transform = `translateX(${
         (this.line.clientWidth + this.line.offsetLeft) * offset
       }px)`
     },
@@ -101,8 +102,8 @@ export default {
     height: 3px;
     background: #3bc66f;
     position: absolute;
-    top: 146%;
     left: 20px;
+    top:150%;
     transition: all 0.2s linear;
   }
 }

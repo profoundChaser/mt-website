@@ -4,7 +4,6 @@
     <main>
       <div class="content">
         <TextContent :title="textContent.title" :content="textContent.content"></TextContent>
-        sandbox="allow-downloads"></iframe>
         <section class="image-section">
           <h2>在Vein上浏览数千张免费图片</h2>
           <div class="img-row">

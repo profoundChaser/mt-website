@@ -26,7 +26,9 @@ import {
     Col,
     Dialog,
     Upload,
-    Card
+    Card,
+    Steps,
+    Step
 } from "element-ui";
 
 Vue.use(Button)
@@ -54,6 +56,8 @@ Vue.use(Button)
     .use(Dialog)
     .use(Upload)
     .use(Card)
+    .use(Step)
+    .use(Steps)
     .use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message=Message

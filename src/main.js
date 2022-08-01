@@ -17,13 +17,11 @@ import huakuai from 'huakuai-vue'
 Vue.use(huakuai)
 
 //使用状态管理
-import { createPinia } from 'pinia'
-const pinia = createPinia()
-
+import store from './store/index'
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 new Vue({
   render: h => h(App),
   router,
-  pinia
+  store
 }).$mount('#app')

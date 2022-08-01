@@ -1,5 +1,5 @@
 <template>
-  <el-card ref="card" id="card">
+  <el-card ref="card" id="card" :body-style="bodyStyle">
     <slot></slot>
   </el-card>
 </template>
@@ -9,8 +9,8 @@ import { getRdNum } from '@/utils/utils'
 export default {
   props: {
     bodyStyle: {
-      type: Object,
-      default: { padding: '20px' },
+      type: Function,
+      default: ()=>{ padding: '20px' },
     },
     shadowType: {
       type: String,
@@ -19,6 +19,10 @@ export default {
     height: {
       type: Number,
     },
+    useColor:{
+      type:Boolean,
+      default:false
+    }
   },
   data() {
     return {
@@ -32,8 +36,10 @@ export default {
   },
   mounted() {
     const card = this.$refs.card
-    // card.$el.style.background = this.createColor()
     card.$el.style.height = this.height + 'px'
+    if(this.useColor){
+       card.$el.style.background = this.createColor()
+    }
   },
 }
 </script>
