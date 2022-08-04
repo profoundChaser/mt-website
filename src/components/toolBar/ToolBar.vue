@@ -12,9 +12,9 @@
       <div class="screen-shot icon-box mt10" ref="screenShot" @click="createShot">
         <i class="iconfont icon-paizhao"></i>
       </div>
-      <div class="icon-box mt10" @click="downloadZip">
+      <!-- <div class="icon-box mt10" @click="downloadZip">
         <i class="iconfont icon-xiazai"></i>
-      </div>
+      </div> -->
       <!-- 自定义操作栏二外的功能 -->
       <slot></slot>
       <div class="menuTop icon-box mt10" ref="toBtn" @click="toTop">
