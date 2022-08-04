@@ -65,18 +65,21 @@ export default {
           {
             validator: validateOldPass,
             trigger: 'blur',
+            require:true
           },
         ],
         new_password: [
           {
             validator: validatePass,
             trigger: 'blur',
+            require:true
           },
         ],
         new_password2: [
           {
             validator: validatePass2,
             trigger: 'blur',
+            require:true
           },
         ],
       },

@@ -47,6 +47,13 @@ const router = new VueRouter({
       redirect: '/me/info',
       children: [
         {
+          path: '/me/store',
+          meta: {
+            title: '我的收藏',
+          },
+          component: () => import('../views/me/child/store/Index.vue'),
+        },
+        {
           path: '/me/info',
           meta: {
             title: '个人信息',
@@ -77,6 +84,7 @@ const router = new VueRouter({
         title: '图片大全',
       },
       component: () => import('../views/imgs/CategoryImgsAll.vue'),
+      redirect: '/imgs/scenery',
       children: [
         {
           path: '/imgs/mv',
@@ -91,6 +99,70 @@ const router = new VueRouter({
           name: 'scenery',
           meta: {
             title: '风景',
+          },
+          component: () => import('../views/imgs/CategoryImgsAll.vue'),
+        },
+        {
+          path: '/imgs/buildings',
+          name: 'buildings',
+          meta: {
+            title: '建筑',
+          },
+          component: () => import('../views/imgs/CategoryImgsAll.vue'),
+        },
+        {
+          path: '/imgs/delicacy',
+          name: 'delicacy',
+          meta: {
+            title: '美食',
+          },
+          component: () => import('../views/imgs/CategoryImgsAll.vue'),
+        },
+        {
+          path: '/imgs/animals',
+          name: 'animals',
+          meta: {
+            title: '动物',
+          },
+          component: () => import('../views/imgs/CategoryImgsAll.vue'),
+        },
+        {
+          path: '/imgs/life',
+          name: 'life',
+          meta: {
+            title: '生活',
+          },
+          component: () => import('../views/imgs/CategoryImgsAll.vue'),
+        },
+        {
+          path: '/imgs/games',
+          name: 'games',
+          meta: {
+            title: '游戏',
+          },
+          component: () => import('../views/imgs/CategoryImgsAll.vue'),
+        },
+        {
+          path: '/imgs/plant',
+          name: 'plant',
+          meta: {
+            title: '植物',
+          },
+          component: () => import('../views/imgs/CategoryImgsAll.vue'),
+        },
+        {
+          path: '/imgs/comic',
+          name: 'comic',
+          meta: {
+            title: '动漫',
+          },
+          component: () => import('../views/imgs/CategoryImgsAll.vue'),
+        },
+        {
+          path: '/imgs/sport',
+          name: 'sport',
+          meta: {
+            title: '动漫',
           },
           component: () => import('../views/imgs/CategoryImgsAll.vue'),
         },
@@ -134,4 +206,9 @@ router.afterEach((to, from) => {
   NProgress.done()
 })
 
+//解决重复跳转报错的问题
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 export default router

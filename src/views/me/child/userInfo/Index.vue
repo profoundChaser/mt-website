@@ -3,7 +3,7 @@
     <el-col :span="6">
       <Card :height="625" id="userInfo-card">
         <div id="userInfo-box">
-          <UserAvatar :img="user.avatar"></UserAvatar>
+          <UserAvatar :img="user.avatar" :user="user"></UserAvatar>
           <div class="username">{{ user.name }}</div>
           <div id="userInfo" class="mt20 ml20">
             <div class="email">邮箱：{{ user.email }}</div>
@@ -75,6 +75,16 @@ import UpdatePwd from './updatePwd.vue'
 import ForgetPwd from './forgetPwd.vue'
 export default {
   data() {
+      var validateEmail = (rule, value, callback) => {
+      const regex = /^(?:\w+\.?)\w+@(?:\w+\.)+\w+$/
+      if (value == '') {
+        callback(new Error('邮箱不能为空'))
+      } else if (regex.test(value)) {
+        callback()
+      } else {
+        callback(new Error('请输入正确的邮箱格式'))
+      }
+    }
     return {
       user: {
         id: null,
@@ -89,23 +99,14 @@ export default {
         sex: null,
       },
       rules: {
-        // nickName: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
-        // email: [
-        //   { required: true, message: '邮箱地址不能为空', trigger: 'blur' },
-        //   {
-        //     type: 'email',
-        //     message: "'请输入正确的邮箱地址",
-        //     trigger: ['blur', 'change'],
-        //   },
-        // ],
-        // phonenumber: [
-        //   { required: true, message: '手机号码不能为空', trigger: 'blur' },
-        //   {
-        //     pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-        //     message: '请输入正确的手机号码',
-        //     trigger: 'blur',
-        //   },
-        // ],
+        name: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
+        email: [
+           {
+            validator: validateEmail,
+            trigger: 'blur',
+            required: true,
+          },
+        ],
       },
       showEditV: true,
       showPwdV: false,

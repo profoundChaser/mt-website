@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { showFullScreenLoading,hideFullScreenLoading} from './loading'
+import { showFullScreenLoading, hideFullScreenLoading } from './loading'
 const options = {
   baseURL: 'http://localhost:8080',
   withCredentials: true,
@@ -9,15 +9,16 @@ const request = axios.create(options)
 
 request.interceptors.request.use(
   (config) => {
-    const token=localStorage.getItem('token')
-    if(token){
-        config.headers=config.headers||{}
-        config.headers['Authorization']=token
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers = config.headers || {}
+      config.headers['Authorization'] = token
     }
     showFullScreenLoading()
     return config
   },
   (err) => {
+    hideFullScreenLoading()
     return Promise.reject(err)
   }
 )
@@ -28,6 +29,7 @@ request.interceptors.response.use(
     return res.data
   },
   (err) => {
+    hideFullScreenLoading()
     return Promise.reject(err)
   }
 )

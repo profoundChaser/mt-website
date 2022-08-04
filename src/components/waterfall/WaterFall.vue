@@ -4,7 +4,7 @@
       <div
         class="img-box"
         v-for="(item, index) in pics"
-        :key="item.img"
+        :key="item.id"
         ref="box"
         :draggable="true"
         @dragstart="dragStart($event, index)"
@@ -12,11 +12,11 @@
         @dragover="dragOver"
         @dragenter="dragEnter"
       >
-        <template v-if="item.isVideo">
+        <!-- <template v-if="item.isVideo">
           <video :src="item.img" muted controls></video>
-        </template>
-        <img v-else v-lazy="item.img" :key="item.img" @click="previewImg(item, index)" />
-        <div class="mask" @click="previewImg(item, index)" v-if="!item.isVideo">
+        </template> -->
+        <img v-lazy="item.imgUrl" :key="item.id" @click="previewImg(item, index)" crossorigin />
+        <div class="mask" @click="previewImg(item, index)" v-if="!closeOperateBar">
           <div class="operateBar">
             <div class="icon-box">
               <i class="iconfont icon-shoucang1" v-if="!item.isStore"></i>
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-        <slot></slot>
+      <slot></slot>
     </div>
     <!-- 预览遮罩 -->
     <template v-if="usePreView">
@@ -53,6 +53,7 @@ import { st, sh, wh, getClientW, newWindow } from '@/utils/utils.js'
 import dragJS from '@/utils/drag'
 import { debounce } from '@/utils/utils.js'
 import { imgToBase64, saveFileWithA, ImgWithSaveFile } from '../../utils/file'
+import { addStore } from '@/api/store'
 export default {
   name: 'pic',
   props: {
@@ -72,6 +73,10 @@ export default {
       type: Array,
       default: [],
     },
+    closeOperateBar: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -90,10 +95,16 @@ export default {
       endOneFlag: true,
     }
   },
+  //由于瀑布流组件不会卸载，所以row会一直增加，所以需要监视路径并重置为1
+  watch: {
+    readyPics(nv, ov) {
+      this.row = 1
+    },
+  },
   methods: {
     previewImg(item, i) {
       this.showPreView = true
-      this.preview.img = item.img
+      this.preview.img = item.imgUrl
       this.preview.index = i
       document.body.style.overflow = 'hidden'
     },
@@ -102,6 +113,7 @@ export default {
       document.body.style.overflowY = 'auto'
     },
     openNewWindow(src) {
+      //新窗口打开图片
       newWindow('/onePic')
       //存储图片
       localStorage.setItem('imgSrc', src)
@@ -131,7 +143,7 @@ export default {
       } else {
         this.preview.index--
       }
-      this.preview.img = this.pics[this.preview.index].img
+      this.preview.img = this.pics[this.preview.index].imgUrl
     },
     next(e) {
       e.stopPropagation()
@@ -140,12 +152,7 @@ export default {
       } else {
         this.preview.index++
       }
-      this.preview.img = this.pics[this.preview.index].img
-    },
-    initImg() {
-      const boxes = this.$refs.box
-      boxes[0].style.left = 0
-      boxes[0].style.top = 0
+      this.preview.img = this.pics[this.preview.index].imgUrl
     },
     waterFall(cols) {
       const boxes = this.$refs.box
@@ -161,6 +168,8 @@ export default {
       }
       for (let i = 0; i < boxes.length; i++) {
         boxes[i].style.width = divideWidth / column + 'px'
+        boxes[0].style.left = 0 + 'px'
+        boxes[0].style.top = 0 + 'px'
         if (i < column && i > 0) {
           boxes[i].style.left =
             parseInt(boxes[i - 1].style.left.split()[0]) +
@@ -192,18 +201,19 @@ export default {
     //收藏
     store(e, item, i) {
       e.stopPropagation()
-      this.pics[i].isStore = !this.pics[i].isStore
-      if (this.pics[i].isStore) {
-        this.$message.success('可右边下载按钮一起下载')
-      }
-      localStorage.setItem(
-        'downloadFiles',
-        JSON.stringify([...JSON.parse(localStorage.getItem('downloadFiles')), item.img])
-      )
+      this.addStore(item)
+      // this.pics[i].isStore = !this.pics[i].isStore
+      // if (this.pics[i].isStore) {
+      //   this.$message.success('可右边下载按钮一起下载')
+      // }
+      // localStorage.setItem(
+      //   'downloadFiles',
+      //   JSON.stringify([...JSON.parse(localStorage.getItem('downloadFiles')), item.img])
+      // )
     },
     downloadImg(e, i) {
       e.stopPropagation()
-      saveFileWithA(imgToBase64(this.pics[i].img), 'mv' + Date.now())
+      saveFileWithA(imgToBase64(this.pics[i].imgUrl), 'vein' + Date.now())
     },
     imgLoad(img) {
       return new Promise((resolve) => {
@@ -229,15 +239,23 @@ export default {
     dragEnter(e) {
       dragJS.dragEnter(e)
     },
+    //添加收藏部分
+    async addStore(item) {
+      const imgId=item.id
+      const userInfo=JSON.parse(localStorage.getItem('userInfo'))
+      const storeUserId=userInfo.id
+      const res=await addStore({imgId,storeUserId})
+      if(res.status!==200)return
+      this.$message.success('收藏成功，可在我的收藏中查看')
+    },
   },
   mounted() {
-    this.initImg()
     this.width = this.$refs.imgIndex.clientWidth
     this.waterFall(this.waterFallSize)
     this.checkWindowScroll(this.waterFallSize)
     // window.addEventListener('resize', this.waterFall(this.waterFallSize))
     //初始化下载的列表
-    localStorage.setItem('downloadFiles', JSON.stringify([]))
+    // localStorage.setItem('downloadFiles', JSON.stringify([]))
   },
   destroyed() {
     window.removeEventListener('scroll', debounce)
@@ -261,7 +279,6 @@ export default {
   position: absolute;
   top: -100%;
   left: -100%;
-  transition: scale 0.3s;
 }
 img {
   width: 100%;

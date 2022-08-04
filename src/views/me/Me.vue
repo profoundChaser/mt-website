@@ -21,7 +21,9 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <router-view></router-view>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
       </el-main>
     </el-container>
   </div>
@@ -41,17 +43,17 @@ export default {
         {
           id: 1,
           name: '我的收藏',
-          path:'/me/store'
+          path: '/me/store',
         },
         {
           id: 2,
           name: '我的好友',
-          path:'/me/friends'
+          path: '/me/friends',
         },
         {
           id: 3,
           name: '我的评论',
-          path:'/me/comments'
+          path: '/me/comments',
         },
       ],
       activePath: '/me/info',
