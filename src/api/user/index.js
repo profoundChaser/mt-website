@@ -12,12 +12,12 @@ export function login(params) {
 
 //修改用户信息
 export function updateUserInfo(params) {
-  return request.post('/updateUser', params)
+  return request.put('/updateUser', params)
 }
 
 //修改密码
 export function updateUserPwd(params) {
-  return request.post('/updatePwd', params)
+  return request.put('/updatePwd', params)
 }
 
 //校验密码
@@ -33,3 +33,6 @@ export function verifyCode(params) {
   return request.post('/verifyCode', params)
 }
 
+export function updateAvatar(formData){
+  return request.put('/updateAvatar',formData)
+}
