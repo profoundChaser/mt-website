@@ -19,12 +19,12 @@
         </section>
         <section class="waterfall-section">
           <h2>免费高分辨率Vein照片</h2>
-          <water-fall
-            :pics="readyPics.slice(0, waterFallSize)"
-            :waterFallSize="waterFallSize"
-            :readyPics="readyPics.slice(waterFallSize, readyPics.length)"
-            class="waterfall"
-          ></water-fall>
+            <water-fall
+              :pics="readyPics.slice(0, waterFallSize)"
+              :waterFallSize="waterFallSize"
+              :readyPics="readyPics.slice(waterFallSize, readyPics.length)"
+              class="waterfall"
+            ></water-fall>
         </section>
       </div>
     </main>
@@ -35,6 +35,7 @@
 import IO from '@/utils/IO.js'
 import WaterFall from '@/components/waterfall/WaterFall.vue'
 import TextContent from '@/components/textcontent/TextContent.vue'
+import { getAllImages } from '@/api/image'
 export default {
   name: 'App',
   components: { WaterFall, TextContent },
@@ -64,20 +65,30 @@ export default {
       readyPics: [],
       textContent: {
         title: '探索更多的优质图片',
-        content: ' Vein有超过一百万张免费的高分辨率照片。在Vein上探索这些流行的照片类别。在Vein许可下，可以免费下载和使用此处的所有照片。',
+        content:
+          ' Vein有超过一百万张免费的高分辨率照片。在Vein上探索这些流行的照片类别。在Vein许可下，可以免费下载和使用此处的所有照片。',
       },
     }
   },
+  methods: {
+    async getAllImages() {
+      const res = await getAllImages()
+      if (res.status !== 200) return
+      this.readyPics = res.data
+    },
+  },
   created() {
-    const io = IO.of(null)
-    const requireContext = require.context(
-      '@/assets/img/mv',
-      true,
-      /^\.\/.*\.(jpg|jpeg|webp|mp4|png)$/i
-    )
-    this.readyPics = io.mergeFiles(
-      io.getAllFiles(requireContext, '@/assets/img/mv').map()
-    )
+    //获取所有的图片
+    this.getAllImages()
+    //   const io = IO.of(null)
+    //   const requireContext = require.context(
+    //     '@/assets/img/mv',
+    //     true,
+    //     /^\.\/.*\.(jpg|jpeg|webp|mp4|png)$/i
+    //   )
+    //   this.readyPics = io.mergeFiles(
+    //     io.getAllFiles(requireContext, '@/assets/img/mv').map()
+    //   )
   },
 }
 </script>

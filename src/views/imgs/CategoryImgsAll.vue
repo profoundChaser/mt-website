@@ -11,7 +11,7 @@
         :pics="readyPics.slice(0, waterFallSize)"
         :waterFallSize="waterFallSize"
         :readyPics="readyPics.slice(waterFallSize, readyPics.length)"
-        class="waterfall"
+        class="waterfall mt20"
       ></water-fall>
     </section>
   </div>
@@ -20,8 +20,8 @@
 <script>
 import TextContent from '@/components/textcontent/TextContent.vue'
 import ScrollCategory from '@/components/scrollcategory/ScrollCategory.vue'
-import IO from '@/utils/IO.js'
 import WaterFall from '@/components/waterfall/WaterFall.vue'
+import { getAllImages } from '@/api/image'
 export default {
   components: { TextContent, ScrollCategory, WaterFall },
   data() {
@@ -32,28 +32,32 @@ export default {
       },
       waterFallSize: 4,
       readyPics: [],
-      curImgPath:null //记录当前图片分类的路径
+      nameInEn: 'mv',
+      allPics: [],
     }
   },
   methods: {
-    showPathImgs(path) {
-      this.curImgPath=path
+    showPathImgs(nameInEn) {
+      if (this.nameInEn === nameInEn) return
+      this.nameInEn = nameInEn
+      this.alterReadyPics()
     },
-    getPics(path) {
-      const io = IO.of(null)
-      const requireContext = require.context(
-        `@/assets/img/mv`,
-        true,
-        /^\.\/.*\.(jpg|jpeg|webp|mp4|png)$/i
-      )
-      this.readyPics = io.mergeFiles(io.getAllFiles(requireContext, `@/assets/img/mv`).map())
+    async getAllImages() {
+      const res = await getAllImages()
+      if (res.status !== 200) return
+      this.allPics = res.data
+      this.alterReadyPics()
+    },
+    alterReadyPics() {
+      this.readyPics = this.allPics.filter((item) => {
+        return item.category_nameInEn === this.nameInEn
+      })
     },
   },
   created() {
-    this.getPics('/mv')
+    this.getAllImages()
   },
-  mounted() {
-  },
+  mounted() {},
 }
 </script>
 
