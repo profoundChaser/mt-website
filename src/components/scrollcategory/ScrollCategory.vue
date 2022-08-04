@@ -1,92 +1,38 @@
 <template>
   <div id="scroll-container">
     <div id="scroll-box" ref="scrollBox">
-      <div class="img-box" v-for="item in scrollImgs" :key="item.id"
-      @click="selectCategory(item.path)">
-        <img :src="item.img" alt="图片" />
-        <p class="center-text">{{ item.text }}</p>
+      <div
+        class="img-box"
+        v-for="item in scrollImgs"
+        :key="item.id"
+        @click="selectCategory(item.nameInEn)"
+      >
+        <img :src="item.imgCover" alt="图片" />
+        <p class="center-text">{{ item.name }}</p>
         <div class="mask"></div>
       </div>
     </div>
-    <button class="icon-box pre" @click="pre" ref="pre">&lt;</button>
-    <button class="icon-box next" @click="next" ref="next">&gt;</button>
+    <button class="icon-box pre" @click="preClick" ref="pre">&lt;</button>
+    <button class="icon-box next" @click="nextClick" ref="next">&gt;</button>
   </div>
 </template>
 
 <script>
+import { getAllCategories } from '@/api/category'
+
 export default {
   data() {
     return {
-      scrollImgs: [
-        {
-          id: -1,
-          text: '全部',
-          img: 'https://images.unsplash.com/photo-1536599018102-9f803c140fc1?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-        {
-          id: 0,
-          text: '风景',
-          path:'/scenery',
-          img: 'https://images.unsplash.com/photo-1536599018102-9f803c140fc1?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-        {
-          id: 1,
-          text: '美女',
-          path:'/mv',
-          img: 'https://images.unsplash.com/photo-1448387473223-5c37445527e7?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-        {
-          id: 2,
-          text: '建筑',
-          img: 'https://images.unsplash.com/photo-1502759683299-cdcd6974244f?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-        {
-          id: 3,
-          text: '美食',
-          img: 'https://images.unsplash.com/photo-1502759683299-cdcd6974244f?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-        {
-          id: 4,
-          text: '动物',
-          img: 'https://images.unsplash.com/photo-1502759683299-cdcd6974244f?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-        {
-          id: 5,
-          text: '运动',
-          img: 'https://images.unsplash.com/photo-1502759683299-cdcd6974244f?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-        {
-          id: 6,
-          text: '生活',
-          img: 'https://images.unsplash.com/photo-1502759683299-cdcd6974244f?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-        {
-          id: 7,
-          text: '游戏',
-          img: 'https://images.unsplash.com/photo-1502759683299-cdcd6974244f?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-        {
-          id: 8,
-          text: '人物',
-          img: 'https://images.unsplash.com/photo-1502759683299-cdcd6974244f?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-        {
-          id: 9,
-          text: '动漫',
-          img: 'https://images.unsplash.com/photo-1502759683299-cdcd6974244f?dpr=1&auto=format&fit=crop&w=440&h=220&q=60',
-        },
-      ],
+      scrollImgs: [],
       scrollBox: null,
       scrollPoint: 0, //滚动指数
-      // pre:null,
-      // next:null,
-      marginLeft:null, //图片容器的左边距 用于计算transform
-      clientWidth:null, //图片容器的宽度 用于计算transform
-      commonPath:'/imgs'
+      marginLeft: null, //图片容器的左边距 用于计算transform
+      clientWidth: null, //图片容器的宽度 用于计算transform
+      commonPath: '/imgs',
     }
   },
   methods: {
-    pre(e) {
+    preClick(e) {
       e.stopPropagation()
       this.scrollBox.style.transform = `translateX(${
         (this.clientWidth + this.marginLeft) * (this.scrollPoint + 1)
@@ -98,7 +44,7 @@ export default {
         this.next.style.display = 'flex'
       }
     },
-    next(e) {
+    nextClick(e) {
       e.stopPropagation()
       this.scrollBox.style.transform = `translateX(${
         (this.clientWidth + this.marginLeft) * (this.scrollPoint - 1)
@@ -111,19 +57,33 @@ export default {
       }
     },
     //选中后通知父组件更换图片
-    selectCategory(path){
-        this.$router.push(this.commonPath+path)
-        this.$emit('showPathImgs',path)
-    }
+    selectCategory(nameInEn) {
+      this.$router.push(this.commonPath + '/' + nameInEn)
+      this.$emit('showPathImgs', nameInEn)
+    },
+    async getAllCategories() {
+      const res = await getAllCategories()
+      if (res.status !== 200) return
+      this.scrollImgs = res.data.rows
+    },
+    initDomInfo() {
+      this.scrollBox = this.$refs.scrollBox
+      this.pre = this.$refs.pre
+      this.next = this.$refs.next
+      this.pre.style.display = 'none'
+      const timer = setTimeout(() => {
+        this.clientWidth = this.scrollBox.children[0].clientWidth
+        let { marginLeft } = window.getComputedStyle(this.scrollBox.children[1])
+        this.marginLeft = +marginLeft.split('px')[0]
+        clearTimeout(timer)
+      }, 500)
+    },
+  },
+  created() {
+    this.getAllCategories()
   },
   mounted() {
-    this.scrollBox = this.$refs.scrollBox
-    this.clientWidth = this.scrollBox.children[0].clientWidth
-    let { marginLeft } = window.getComputedStyle(this.scrollBox.children[1])
-    this.marginLeft = +marginLeft.split('px')[0]
-    this.pre = this.$refs.pre
-    this.next = this.$refs.next
-    this.pre.style.display = 'none'
+    this.initDomInfo()
   },
 }
 </script>
@@ -144,6 +104,8 @@ export default {
     overflow: hidden;
     cursor: pointer;
     min-width: 172px;
+    width: 172px;
+    height: 115px;
     &:nth-child(n) {
       margin-left: 20px;
     }
@@ -153,6 +115,7 @@ export default {
     img {
       border-radius: 10px;
       width: 100%;
+      min-height: 100%;
     }
     .center-text {
       position: absolute;
@@ -169,7 +132,7 @@ export default {
       top: 0;
       left: 0;
       width: 100%;
-      height: calc(100% - 5px);
+      height: 100%;
       background: rgba(0, 0, 0, 0.3);
       border-radius: 10px;
       transition: all 0.1s linear;
