@@ -2,6 +2,8 @@ import FileSaver from 'file-saver'
 import JSZip from 'jszip'
 export function imgToBase64(imgUrl) {
   let image = new Image()
+  //联网必须添加的属性
+  image.crossOrigin = 'anonymous';
   image.src = imgUrl
   let canvas = document.createElement('canvas')
   canvas.width = image.naturalWidth
@@ -12,7 +14,7 @@ export function imgToBase64(imgUrl) {
   return dataUrl
 }
 
-export function saveFileWithA(blob, filename = 'mv' + Date.now()) {
+export function saveFileWithA(blob, filename = 'vein' + Date.now()) {
   const a = document.createElement('a')
   a.download = filename
   let blobUrlFlag = false
@@ -33,7 +35,7 @@ export function saveFileWithA(blob, filename = 'mv' + Date.now()) {
   }
 }
 
-export function ImgWithSaveFile(imgUrl, fileName = 'mv' + Date.now()) {
+export function ImgWithSaveFile(imgUrl, fileName = 'vein' + Date.now()) {
   let image = new Image()
   image.src = imgUrl
   let canvas = document.createElement('canvas')

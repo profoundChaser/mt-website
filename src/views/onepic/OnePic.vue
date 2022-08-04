@@ -1,7 +1,7 @@
 <template>
   <div class="single-mv-index" ref="singleMvIndex">
     <div class="img-Box">
-      <img :src="src" alt="一张美女图片" ref="img" @mouseup="mouseup" @mousedown="dragImg" />
+      <img :src="src" alt="一张美女图片" ref="img" @mouseup="mouseup" @mousedown="dragImg" crossorigin/>
     </div>
   </div>
 </template>
