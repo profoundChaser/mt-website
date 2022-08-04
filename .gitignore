@@ -2,6 +2,10 @@
 node_modules
 /dist
 /src/assets/img/mv
+/src/assets/img/scenery
+/src/assets/img/animals
+/src/assets/img/games
+/src/assets/img/life
 
 # local env files
 .env.local
