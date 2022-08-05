@@ -28,7 +28,9 @@ import {
     Upload,
     Card,
     Steps,
-    Step
+    Step,
+    Table,
+    TableColumn
 } from "element-ui";
 
 Vue.use(Button)
@@ -58,6 +60,8 @@ Vue.use(Button)
     .use(Card)
     .use(Step)
     .use(Steps)
+    .use(Table)
+    .use(TableColumn)
     .use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message=Message
