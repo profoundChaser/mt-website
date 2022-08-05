@@ -32,7 +32,7 @@ export default {
 
 <style lang="scss" scoped>
 .theme-box {
-  width: 50px;
+  width: 60px;
   height: 25px;
   border-radius: 30px;
   /* box-shadow: 0px 0px 1.3px rgba(0, 0, 0, 0.07), 0px 0px 3.4px rgba(0, 0, 0, 0.05),

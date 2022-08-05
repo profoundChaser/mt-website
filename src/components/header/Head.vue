@@ -23,7 +23,7 @@
         </div>
       </template>
     </div>
-    <Theme id="theme"></Theme>
+    <Theme id="theme" class="mr20"></Theme>
     <Lang></Lang>
   </div>
 </template>
@@ -120,7 +120,6 @@ export default {
   .user-box {
     display: flex;
     align-items: center;
-    width: 200px;
     .login-btn,
     .register-btn,
     .out-btn {
@@ -129,9 +128,15 @@ export default {
         color: #3bc66f;
       }
     }
+    .username{
+      width: 80px;
+      overflow: hidden;
+    }
     .avatar {
       width: 45px;
       height: 45px;
+      min-width: 45px;
+      min-height: 45px;
       border-radius: 50%;
       background: gray;
       overflow: hidden;
@@ -139,6 +144,9 @@ export default {
         width: 100%;
         height: 100%;
       }
+    }
+    .out-btn {
+      width: 40px;
     }
   }
 

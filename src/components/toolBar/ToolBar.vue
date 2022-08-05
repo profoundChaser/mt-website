@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="toolbar" ref="toolbar">
-      <template>
+      <template v-if="showFullScreen">
         <div class="icon-box" @click="fullScreen" v-if="!isFullScreen">
           <i class="iconfont icon-quanping"></i>
         </div>
@@ -9,7 +9,8 @@
           <i class="iconfont icon-ExitFullScreen"></i>
         </div>
       </template>
-      <div class="screen-shot icon-box mt10" ref="screenShot" @click="createShot">
+      <div class="screen-shot icon-box mt10" ref="screenShot" @click="createShot"
+      v-if="showShot">
         <i class="iconfont icon-paizhao"></i>
       </div>
       <!-- <div class="icon-box mt10" @click="downloadZip">
@@ -38,7 +39,16 @@ import { fullScreen, outFullScreen } from '@/utils/fullScreen'
 import { downloadMoreWidthZip, ImgWithSaveFile } from '@/utils/file'
 export default {
   name: 'About',
-  props: {},
+  props: {
+    showFullScreen:{
+      type:Boolean,
+      default:true
+    },
+    showShot:{
+      type:Boolean,
+      default:true,
+    }
+  },
   data() {
     return {
       st: 0,
