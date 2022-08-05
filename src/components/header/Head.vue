@@ -83,6 +83,7 @@ export default {
     loginOut() {
       localStorage.clear()
       this.isLogin = false
+      this.$router.push('/login')
     },
     toUploadImg(){
       this.$router.push('/upload')

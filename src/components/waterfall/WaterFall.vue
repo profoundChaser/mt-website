@@ -224,6 +224,12 @@ export default {
     },
     dragStart(e, i) {
       dragJS.dragStart(e)
+      console.log(e.target.src)
+      this.pics.forEach((item) => {
+        if (item.imgUrl === e.target.src) {
+          this.sendStoreIndex(item.id)
+        }
+      })
       this.dragItemIndex = i
     },
     drop(e, i) {
@@ -241,12 +247,16 @@ export default {
     },
     //添加收藏部分
     async addStore(item) {
-      const imgId=item.id
-      const userInfo=JSON.parse(localStorage.getItem('userInfo'))
-      const storeUserId=userInfo.id
-      const res=await addStore({imgId,storeUserId})
-      if(res.status!==200)return
+      const imgId = item.id
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      const storeUserId = userInfo.id
+      const res = await addStore({ imgId, storeUserId })
+      if (res.status !== 200) return
       this.$message.success('收藏成功，可在我的收藏中查看')
+    },
+    //添加删除需要发送的自定义事件
+    sendStoreIndex(storeImg) {
+      this.$emit('sendStoreIndex', storeImg)
     },
   },
   mounted() {
