@@ -68,11 +68,7 @@
         </keep-alive>
       </template>
       <template v-else>
-        <div class="info">
-          密码重置完成!&nbsp;请重新登录进行校验&nbsp;<span class="loginOut" @click="loginOut"
-            >退出登录</span
-          >
-        </div>
+        <div class="info">图片上传完成&nbsp;<span @click="uploadAgain">继续上传</span></div>
       </template>
     </div>
   </div>
@@ -80,11 +76,8 @@
 
 <script>
 import Card from '@/components/common/Card.vue'
-import { debounce } from '@/utils/utils'
+import { uploadImages } from '@/api/image'
 export default {
-  props: {
-    userInfo: Object,
-  },
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
@@ -110,13 +103,15 @@ export default {
         rows: null,
         count: null,
       },
+      //获取用户的id作为图片的外键 即上传人信息
+      userId: JSON.parse(localStorage.getItem('userInfo')).id,
       file: {
         name: null,
         category: null,
         dataset: [],
       },
       fileList: [],
-      activeStep: 2,
+      activeStep: 1,
       rules: {
         name: [{ required: true, message: '请输入文件描述', trigger: 'blur' }],
         category: [{ required: true, message: '请选择文件分类', trigger: 'change' }],
@@ -134,21 +129,44 @@ export default {
         return
       }
     },
+    //提交时做个判断
     submitUpload() {
-      console.log(this.fileList)
       if (this.fileList.length === 0) {
         this.$message.warning('请先选择上传文件！')
         return
       }
       this.uploadImg()
     },
-    uploadImg() {
+    //上传文件详细的api,调用后台接口
+    async uploadImg() {
+      let categoryInEn
+      let formData = new FormData()
+      this.fileList.forEach((file) => {
+        formData.append('multipleFiles', file.raw)
+      })
+      this.categories.rows.forEach((item) => {
+        if (item.id === this.file.category) {
+          categoryInEn = item.nameInEn
+        }
+      })
+      const imageObj = {
+        name: this.file.name,
+        categoryId: this.file.category,
+        uploaderId: this.userId,
+        categoryPath: categoryInEn,
+        formDataUUid: formData.getAll('multipleFiles'),
+      }
+      formData.append('imageObj', JSON.stringify(imageObj))
+      const res = await uploadImages(formData)
       this.$message.success('上传成功！')
+      this.fileList = []
+      this.activeStep = 3
     },
+    //该api可以获取到随机生成图片的url和name以便给file-list使用
     handleChange(file, fileList) {
-      this.fileList.push({ name: file.name, url: file.url })
+      this.fileList.push({ name: file.name, url: file.url, raw: file.raw })
     },
-    //重写事件
+    //重写事件 防止默认的action处理流程
     requestUpload() {},
     progressUpload(e, file, fileList) {},
     handlePreview(file) {},
@@ -158,7 +176,6 @@ export default {
           this.fileList.splice(i, 1)
         }
       })
-      console.log(this.fileList)
     },
     submitForm() {
       this.$refs.user.validate((valid) => {
@@ -168,6 +185,9 @@ export default {
           return false
         }
       })
+    },
+    uploadAgain() {
+      this.activeStep = 1
     },
   },
   components: { Card },
