@@ -8,6 +8,7 @@
           <div id="userInfo" class="mt20 ml20">
             <div class="email">邮箱：{{ user.email }}</div>
             <div class="sex mt10">性别：{{ user.sex }}</div>
+            <div class="role mt10">身份：{{ user.role == 'admin' ? '管理员' : '用户' }}</div>
           </div>
         </div>
         <div id="select-box" @click="showSomeInfo($event)">
@@ -56,7 +57,7 @@
               <UpdatePwd :userInfo="user"></UpdatePwd>
             </keep-alive>
           </template>
-            <template v-else-if="showForgetV">
+          <template v-else-if="showForgetV">
             <keep-alive>
               <ForgetPwd :userInfo="user"></ForgetPwd>
             </keep-alive>
@@ -75,7 +76,7 @@ import UpdatePwd from './updatePwd.vue'
 import ForgetPwd from './forgetPwd.vue'
 export default {
   data() {
-      var validateEmail = (rule, value, callback) => {
+    var validateEmail = (rule, value, callback) => {
       const regex = /^(?:\w+\.?)\w+@(?:\w+\.)+\w+$/
       if (value == '') {
         callback(new Error('邮箱不能为空'))
@@ -101,7 +102,7 @@ export default {
       rules: {
         name: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
         email: [
-           {
+          {
             validator: validateEmail,
             trigger: 'blur',
             required: true,
@@ -130,7 +131,7 @@ export default {
         this.showEdit()
       } else if (val === '修改密码') {
         this.showPwd()
-      }else{
+      } else {
         this.showForget()
       }
     },

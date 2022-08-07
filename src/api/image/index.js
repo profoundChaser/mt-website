@@ -6,6 +6,15 @@ export function uploadImages(formData) {
   })
 }
 
-export function getAllImages(id = 1) {
-  return request.get('/images', id)
+export function getAllImages(params = {}) {
+  return request.get('/images', params)
+}
+
+export function updateImage(id,params) {
+  return request.put(`/images/${id}`, params)
+}
+
+//删除图片
+export function deleteImage(params) {
+  return request.post('/updateImage',params)
 }

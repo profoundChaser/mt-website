@@ -1,19 +1,30 @@
 <template>
   <div class="select-box">
     <span class="select-label">{{ label }}</span>
-    <el-select v-model="selectVal" placeholder="请选择" :size="size" class="ml10">
-      <el-option
-        v-for="item in selectOptions"
-        :key="item.id"
-        :label="item.label"
-        :value="item.id"
-        @change="change"
-        @clear="clear"
-        @blur="blur"
-        @focus="focus"
-        @visible-change="visibleChange"
-      >
-      </el-option>
+    <el-select
+      v-model="selectVal"
+      placeholder="请选择"
+      :size="size"
+      class="ml10"
+      :autoDefined="autoDefined"
+      @change="change"
+      @clear="clear"
+      @blur="blur"
+      @focus="focus"
+      @visible-change="visibleChange"
+    >
+      <template v-if="!autoDefined">
+        <el-option
+          v-for="item in selectOptions"
+          :key="item.id"
+          :label="item.label"
+          :value="item.id"
+        >
+        </el-option>
+      </template>
+      <template v-else>
+        <slot></slot>
+      </template>
     </el-select>
   </div>
 </template>
@@ -21,6 +32,11 @@
 <script>
 export default {
   props: {
+    //是否自定义options
+    autoDefined: {
+      type: Boolean,
+      default: false,
+    },
     placeholder: {
       type: String,
       default: '请选择',
@@ -49,19 +65,24 @@ export default {
       type: Function,
       default: function () {},
     },
-    size:{
-      type:String,
-      default:'small'
+    size: {
+      type: String,
+      default: 'small',
     },
-    label:{
-      type:String,
-      default:'选择'
-    }
+    label: {
+      type: String,
+      default: '选择',
+    },
   },
-  data() {  
+  data() {
     return {
       selectVal: '',
     }
+  },
+  methods: {
+    clearSelectVal() {
+      this.selectVal = ''
+    },
   },
 }
 </script>

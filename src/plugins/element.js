@@ -31,7 +31,8 @@ import {
     Step,
     Table,
     TableColumn,
-    Pagination
+    Pagination,
+    MessageBox
 } from "element-ui";
 
 Vue.use(Button)
@@ -67,3 +68,4 @@ Vue.use(Button)
     .use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message=Message
+Vue.prototype.$confirm=MessageBox.confirm

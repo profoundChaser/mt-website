@@ -19,35 +19,9 @@ export default {
   props: {
     btnList: {
       type: Array,
-      default: [
-        {
-          name: '新增',
-          icon: 'el-icon-plus',
-          handleClick: function () {},
-          type: 'primary',
-        },
-        {
-          name: '修改',
-          icon: 'el-icon-edit',
-          handleClick: function () {},
-          type: 'success',
-          disabled: true,
-        },
-        {
-          name: '删除',
-          icon: 'el-icon-delete',
-          handleClick: function () {},
-          type: 'danger',
-          disabled: true,
-        },
-        {
-          name: '导出',
-          icon: 'el-icon-download',
-          handleClick: function () {},
-          type: 'warning',
-          disabled: true,
-        },
-      ],
+      default:function(){
+        return []
+      }
     },
     showIcon: {
       type: Boolean,

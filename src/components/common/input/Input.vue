@@ -2,6 +2,7 @@
   <div class="input-box">
     <span class="search-label">{{ label }}</span>
     <el-input
+      v-model="inputVal"
       :placeholder="placeholder"
       :clearable="clearable"
       :disabled="disabled"
@@ -69,11 +70,20 @@ export default {
     },
     input: {
       type: Function,
-      default: function () {},
     },
     clear: {
       type: Function,
       default: function () {},
+    },
+  },
+  data() {
+    return {
+      inputVal: '',
+    }
+  },
+  methods: {
+    clearInputVal() {
+      this.inputVal = ''
     },
   },
 }
