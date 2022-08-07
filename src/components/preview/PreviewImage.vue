@@ -51,8 +51,6 @@ export default {
       }
       this.preview.img = this.images[this.preview.index][this.propName]
     },
-  },
-  methods: {
     openNewWindow(src) {
       //新窗口打开图片
       newWindow('/onePic')

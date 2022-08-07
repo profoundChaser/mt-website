@@ -8,7 +8,7 @@ dragJS.dragStart = function (e) {
 dragJS.dragEnd = function (e) {
 }
 
-dragJS.dragEnd = function (e) {
+dragJS.dragLeave = function (e) {
 }
 
 dragJS.dragOver = function (e) {
@@ -17,7 +17,6 @@ dragJS.dragOver = function (e) {
 
 dragJS.dragEnter = function (e) {
   e.preventDefault()
-
 }
 
 dragJS.drop = function (e) {
