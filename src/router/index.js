@@ -67,6 +67,48 @@ const router = new VueRouter({
           },
           component: () => import('../views/me/child/friends/Chat.vue'),
         },
+        {
+          path:'/me/users',
+          meta:{
+            title:'用户管理'
+          },
+          component:()=>import('../views/me/admin/Users.vue')
+        },
+        {
+          path:'/me/roles',
+          meta:{
+            title:'角色管理'
+          },
+          component:()=>import('../views/me/admin/Roles.vue')
+        },
+        {
+          path:'/me/images',
+          meta:{
+            title:'图片管理'
+          },
+          component:()=>import('../views/me/admin/Images.vue')
+        },
+        {
+          path:'/me/imgcategories',
+          meta:{
+            title:'图片类型管理'
+          },
+          component:()=>import('../views/me/admin/ImgCategory.vue')
+        },
+        {
+          path:'/me/statistics',
+          meta:{
+            title:'用户浏览下载统计'
+          },
+          component:()=>import('../views/me/admin/Statistic.vue')
+        },
+        {
+          path:'/me/logs',
+          meta:{
+            title:'日志管理'
+          },
+          component:()=>import('../views/me/admin/Logs.vue')
+        }
       ],
     },
     {
@@ -84,7 +126,7 @@ const router = new VueRouter({
         title: '图片大全',
       },
       component: () => import('../views/imgs/CategoryImgsAll.vue'),
-      redirect: '/imgs/scenery',
+      redirect: '/imgs/mv',
       children: [
         {
           path: '/imgs/mv',

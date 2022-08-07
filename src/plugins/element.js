@@ -30,7 +30,8 @@ import {
     Steps,
     Step,
     Table,
-    TableColumn
+    TableColumn,
+    Pagination
 } from "element-ui";
 
 Vue.use(Button)
@@ -62,6 +63,7 @@ Vue.use(Button)
     .use(Steps)
     .use(Table)
     .use(TableColumn)
+    .use(Pagination)
     .use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message=Message

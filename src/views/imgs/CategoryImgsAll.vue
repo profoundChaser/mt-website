@@ -45,7 +45,7 @@ export default {
     async getAllImages() {
       const res = await getAllImages()
       if (res.status !== 200) return
-      this.allPics = res.data
+      this.allPics = res.data.imgsArr
       this.alterReadyPics()
     },
     alterReadyPics() {

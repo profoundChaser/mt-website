@@ -15,8 +15,17 @@
           :collapse="false"
         >
           <el-menu-item :index="menu.path" v-for="(menu, index) in meMenus" :key="menu.id">
-            <i class="el-icon-menu"></i>
-            <span slot="title">{{ menu.name }}</span>
+            <i class="iconfont" :class="menu.icon"></i>
+            <span slot="title" class="ml10">{{ menu.name }}</span>
+          </el-menu-item>
+          <el-menu-item
+            :index="menu.path"
+            v-for="(menu, index) in adminMenus"
+            :key="menu.id"
+            v-if="role == 'admin'"
+          >
+            <i class="iconfont" :class="menu.icon"></i>
+            <span slot="title" class="ml10">{{ menu.name }}</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -39,24 +48,67 @@ export default {
           id: 0,
           name: '个人信息',
           path: '/me/info',
+          icon: 'icon-gerenxinxi',
         },
         {
           id: 1,
           name: '我的收藏',
           path: '/me/store',
+          icon: 'icon-wodeshoucang',
         },
         {
           id: 2,
           name: '我的好友',
           path: '/me/friends',
+          icon: 'icon-haoyou',
         },
         {
           id: 3,
           name: '我的评论',
           path: '/me/comments',
+          icon: 'icon-dongtai01',
+        },
+      ],
+      adminMenus: [
+        {
+          id: 4,
+          name: '用户管理',
+          path: '/me/users',
+          icon: 'icon-yonghutianchong',
+        },
+        {
+          id: 5,
+          name: '角色管理',
+          path: '/me/roles',
+          icon: 'icon-role',
+        },
+        {
+          id: 6,
+          name: '图片管理',
+          path: '/me/images',
+          icon: 'icon-tupian',
+        },
+        {
+          id: 7,
+          name: '图片类型管理',
+          path: '/me/imgcategories',
+          icon: 'icon-fenlei',
+        },
+        {
+          id: 8,
+          name: '用户浏览下载统计',
+          path: '/me/statistics',
+          icon: 'icon-tubiao',
+        },
+        {
+          id: 9,
+          name: '日志管理',
+          path: '/me/logs',
+          icon: 'icon-rizhi',
         },
       ],
       activePath: '/me/info',
+      role: '',
     }
   },
   methods: {
@@ -65,6 +117,10 @@ export default {
     handleSelect(index) {
       this.activePath = index
     },
+  },
+  created() {
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    this.role = userInfo.role
   },
 }
 </script>
@@ -85,6 +141,10 @@ export default {
 
       .el-icon-menu {
         color: #fff !important;
+      }
+
+      .iconfont {
+        color: #fff;
       }
     }
   }

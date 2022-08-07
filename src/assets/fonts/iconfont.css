@@ -1,6 +1,6 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3494929 */
-  src: url('../fonts/iconfont.woff2?t=1657346634112') format('woff2'),
+    src: url('../fonts/iconfont.woff2?t=1657346634112') format('woff2'),
        url('../fonts/iconfont.woff?t=1657346634112') format('woff'),
        url('../fonts/iconfont.ttf?t=1657346634112') format('truetype');
 }
@@ -11,6 +11,62 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yonghutianchong:before {
+  content: "\e6a2";
+}
+
+.icon-dongtai01:before {
+  content: "\e616";
+}
+
+.icon-rizhi:before {
+  content: "\e69a";
+}
+
+.icon-tupian:before {
+  content: "\e60f";
+}
+
+.icon-wodeshoucang:before {
+  content: "\e6ca";
+}
+
+.icon-role:before {
+  content: "\e60b";
+}
+
+.icon-remove-role:before {
+  content: "\e60c";
+}
+
+.icon-add-role:before {
+  content: "\e60d";
+}
+
+.icon-setting-role:before {
+  content: "\e60e";
+}
+
+.icon-edit-role:before {
+  content: "\e611";
+}
+
+.icon-haoyou:before {
+  content: "\e6ea";
+}
+
+.icon-tubiao:before {
+  content: "\e612";
+}
+
+.icon-fenlei:before {
+  content: "\e6c6";
+}
+
+.icon-gerenxinxi:before {
+  content: "\e601";
 }
 
 .icon-shangyi:before {
