@@ -162,3 +162,14 @@ export const getStore = function (type, key) {
     sessionStorage.getItem(ley)
   }
 }
+
+//精确查询
+export const queryWidthExact = function (obj, prop, val) {
+  console.log(obj[prop] === val, obj, prop, val)
+  return obj[prop] === val
+}
+
+//模糊查询
+export const queryWidthBlur = function (obj, prop, val) {
+  return obj[prop].indexOf(val) >= 0
+}
