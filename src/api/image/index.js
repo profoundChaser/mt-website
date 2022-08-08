@@ -18,3 +18,7 @@ export function updateImage(id,params) {
 export function deleteImage(params) {
   return request.post('/updateImage',params)
 }
+
+export function getRandomImage(){
+  return request.get('/randomImage')
+}

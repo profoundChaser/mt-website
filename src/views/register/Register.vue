@@ -1,6 +1,6 @@
 <template>
   <div class="register-index">
-    <div class="left">
+    <div class="left" ref="left">
       <div class="content">
         <h1>创建从这里开始</h1>
         <P>
@@ -49,7 +49,7 @@
           <el-input type="password" v-model="user.checkPwd" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" id="register-btn" @click="register">注册</el-button>
+          <el-button type="primary" id="register-btn" @click="submitForm('user')">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -58,7 +58,8 @@
 
 <script>
 import ICountUp from 'vue-countup-v2'
-import { register, home } from '@/api/user'
+import { register } from '@/api/user'
+import { getRandomImage } from '@/api/image'
 export default {
   components: {
     ICountUp,
@@ -73,19 +74,16 @@ export default {
       } else {
         callback(new Error('请输入正确的邮箱格式'))
       }
+      callback()
     }
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
       } else {
-        if (this.user.pwd !== '') {
-          this.$refs.user.validateField('pwd')
-        }
         callback()
       }
     }
     var validatePass2 = (rule, value, callback) => {
-      console.log(value)
       if (value === '') {
         callback(new Error('请再次输入密码'))
       } else if (value !== this.user.pwd) {
@@ -103,7 +101,7 @@ export default {
         email: null,
         sex: '0',
       },
-      endVal: 4082318,
+      endVal: null,
       rules: {
         email: [
           {
@@ -112,7 +110,7 @@ export default {
             required: true,
           },
         ],
-        username:[{ required: true, message: '用户名不能为空', trigger: 'blur' }],
+        username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
         pwd: [
           {
             validator: validatePass,
@@ -120,7 +118,7 @@ export default {
             required: true,
           },
         ],
-        
+
         checkPwd: [
           {
             validator: validatePass2,
@@ -152,10 +150,33 @@ export default {
         password: this.user.pwd,
         sex: this.user.sex,
       })
+      if (res.status !== 200) return this.$message.error(res.msg)
+      this.$message.success(res.msg)
+      this.$router.push('/login')
+    },
+    async getRandomImage() {
+      const left = this.$refs.left
+      const res = await getRandomImage()
       if (res.status !== 200) return
+      const { data } = res
+      console.log(res)
+      left.style.background = `url(${data.img.imgUrl}) no-repeat scroll`
+      left.style.backgroundSize = '100%'
+      this.endVal = data.count
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.register()
+        } else {
+          return false
+        }
+      })
     },
   },
-  mounted() {},
+  mounted() {
+    this.getRandomImage()
+  },
 }
 </script>
 
@@ -166,7 +187,7 @@ export default {
     width: 600px;
     height: 100vh;
     background: url('https://images.unsplash.com/photo-1658107291228-e23746256f5a?ixlib=rb-1.2.1&w=1080&fit=max&q=80&fm=jpg&crop=entropy&cs=tinysrgb');
-    background-position: center;
+    background-size: 100% 100%;
     animation: down 0.5s ease-in-out;
     display: flex;
     justify-content: center;
