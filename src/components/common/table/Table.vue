@@ -164,7 +164,8 @@ export default {
       type:Function
     },
     rowClick:{
-      type:Function
+      type:Function,
+      default:function(){}
     },
     //分页器
     showPage: {

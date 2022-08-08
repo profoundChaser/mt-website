@@ -66,3 +66,8 @@
 .mb20{
     margin-bottom: 20px;
 }
+
+.operateBar {
+    display: flex;
+    justify-content: flex-end;
+  }

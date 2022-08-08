@@ -25,14 +25,32 @@ export function validateUserPwd(params) {
   return request.post('/validatePwd', params)
 }
 
+//获取校验码
 export function getCode(params) {
   return request.post('/sendEmail', params)
 }
 
+//进行校验
 export function verifyCode(params) {
   return request.post('/verifyCode', params)
 }
 
-export function updateAvatar(formData){
-  return request.put('/updateAvatar',formData)
+export function updateAvatar(formData) {
+  return request.put('/updateAvatar', formData)
+}
+//获取所有用户
+export function getAllUsers(params={}) {
+  return request.get('/users',params)
+}
+
+export function updateUser(params) {
+  return request.post('/deleteUser', params)
+}
+
+export function deleteUser(id) {
+  return request.post('/deleteUser', { id })
+}
+
+export function deleteUsers(params) {
+  return request.post('/deleteUsers', params)
 }

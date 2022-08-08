@@ -6,30 +6,43 @@ const options = {
   timeout: 5000,
 }
 const request = axios.create(options)
-
+//是否隐藏使用loading
+const checkLoadings = ['/previewAdd']
+let isHiddenLoading = true
 request.interceptors.request.use(
   (config) => {
+    if (checkLoadings.includes(config.url)) {
+      isHiddenLoading = false
+    }
     const token = localStorage.getItem('token')
     if (token) {
       config.headers = config.headers || {}
       config.headers['Authorization'] = token
     }
-    showFullScreenLoading()
+    if (isHiddenLoading) {
+      showFullScreenLoading()
+    }
     return config
   },
   (err) => {
-    hideFullScreenLoading()
+    if (hideFullScreenLoading) {
+      hideFullScreenLoading()
+    }
     return Promise.reject(err)
   }
 )
 
 request.interceptors.response.use(
   (res) => {
-    hideFullScreenLoading()
+    if (hideFullScreenLoading) {
+      hideFullScreenLoading()
+    }
     return res.data
   },
   (err) => {
-    hideFullScreenLoading()
+    if (hideFullScreenLoading) {
+      hideFullScreenLoading()
+    }
     return Promise.reject(err)
   }
 )

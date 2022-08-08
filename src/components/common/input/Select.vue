@@ -1,11 +1,11 @@
 <template>
   <div class="select-box">
-    <span class="select-label">{{ label }}</span>
+    <span class="select-label" v-if="useLabel">{{ label }}</span>
     <el-select
       v-model="selectVal"
       placeholder="请选择"
       :size="size"
-      class="ml10"
+      :class="useMarginLeft?'ml10':''"
       :autoDefined="autoDefined"
       @change="change"
       @clear="clear"
@@ -73,6 +73,14 @@ export default {
       type: String,
       default: '选择',
     },
+    useLabel:{
+      type:Boolean,
+      default:true
+    },
+    useMarginLeft:{
+      type:Boolean,
+      default:true
+    }
   },
   data() {
     return {

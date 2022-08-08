@@ -15,11 +15,10 @@
         </el-form-item>
         <el-form-item label="密码" prop="pwd">
           <el-input type="password" v-model="user.pwd"></el-input>
-          <!-- autocomplete="off" -->
         </el-form-item>
         <div class="navigator-bar">
-          <button class="forget" @click="toPwd">忘记密码?</button>
-          <button class="to-register" @click="toRegister">注册</button>
+          <el-button class="forget" @click="toPwd">忘记密码?</el-button>
+          <el-button class="to-register" @click="toRegister">注册</el-button>
         </div>
         <el-form-item>
           <el-button type="primary" @click="submitForm('user')" id="login-btn">登录</el-button>
@@ -129,10 +128,12 @@ export default {
 .navigator-bar {
   display: flex;
   justify-content: space-between;
-  button {
+
+   .el-button{
     color: #fff;
     opacity: 0.5;
     transition: all 0.1s linear;
+    background: none;
     &:hover {
       text-decoration: underline;
     }

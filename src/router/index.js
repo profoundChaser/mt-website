@@ -22,7 +22,7 @@ const router = new VueRouter({
       name: 'register',
       component: () => import('../views/register/Register.vue'),
       meta: {
-        title: '登录',
+        title: '注册',
       },
     },
     {
