@@ -18,6 +18,11 @@ Vue.use(huakuai)
 
 //使用状态管理
 import store from './store/index'
+
+//引入echarts
+const echarts=require('echarts')
+Vue.prototype.$echarts=echarts
+
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 new Vue({

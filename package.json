@@ -13,6 +13,7 @@
     "babel-plugin-component": "^1.1.1",
     "core-js": "^3.8.3",
     "countup.js": "^2.3.2",
+    "echarts": "^5.3.3",
     "element-ui": "^2.15.9",
     "file-saver": "^2.0.5",
     "grade-js": "^1.0.10",
