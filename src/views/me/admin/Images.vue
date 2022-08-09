@@ -432,8 +432,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.operateBar {
-  display: flex;
-  justify-content: flex-end;
-}
 </style>
