@@ -28,7 +28,7 @@
                   clearable
                 >
                   <el-option
-                    v-for="category in categories.rows"
+                    v-for="category in categories.categories"
                     :key="category.id"
                     :label="category.name"
                     :value="category.id"
@@ -144,7 +144,7 @@ export default {
       this.fileList.forEach((file) => {
         formData.append('multipleFiles', file.raw)
       })
-      this.categories.rows.forEach((item) => {
+      this.categories.categories.forEach((item) => {
         if (item.id === this.file.category) {
           categoryInEn = item.nameInEn
         }

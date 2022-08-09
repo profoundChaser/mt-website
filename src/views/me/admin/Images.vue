@@ -228,7 +228,7 @@ export default {
     async getAllCategories() {
       const res = await getAllCategories()
       if (res.status !== 200) return
-      this.selectOptions = res.data.rows
+      this.selectOptions = res.data.categories
     },
     //初始化按钮
     initBtnList() {

@@ -26,3 +26,11 @@ export function getRandomImage() {
 export function previewImgAdd(id) {
   return request.post('/previewAdd', { id })
 }
+
+export function downloadsImgAdd(id){
+  return request.post('/downloadsAdd', { id })
+}
+
+export function getCountInfo(){
+  return request.get('/countInfo')
+}

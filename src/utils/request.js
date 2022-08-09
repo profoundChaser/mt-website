@@ -7,7 +7,7 @@ const options = {
 }
 const request = axios.create(options)
 //是否隐藏使用loading
-const checkLoadings = ['/previewAdd']
+const checkLoadings = ['/previewAdd','/downloadsAdd']
 let isHiddenLoading = true
 request.interceptors.request.use(
   (config) => {

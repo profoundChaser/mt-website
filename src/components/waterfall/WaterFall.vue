@@ -27,7 +27,10 @@
             </div>
           </div>
           <div class="bottomBar">
-            <div class="userInfo"></div>
+            <div class="userInfo">
+              <img :src="item.avatar" alt="" class="avatar mt20" />
+              <span class="uploader ml10">{{ item.uploader }}</span>
+            </div>
             <div class="icon-box download" @click="downloadImg($event, index)">
               <i class="iconfont icon-xiazai"></i>
             </div>
@@ -54,6 +57,7 @@ import dragJS from '@/utils/drag'
 import { debounce } from '@/utils/utils.js'
 import { imgToBase64, saveFileWithA, ImgWithSaveFile } from '../../utils/file'
 import { addStore } from '@/api/store'
+import { downloadsImgAdd, previewImgAdd } from '@/api/image'
 export default {
   name: 'pic',
   props: {
@@ -102,11 +106,16 @@ export default {
     },
   },
   methods: {
-    previewImg(item, i) {
+    async previewImg(item, i) {
       this.showPreView = true
       this.preview.img = item.imgUrl
       this.preview.index = i
       document.body.style.overflow = 'hidden'
+      this.previewImgAdd(item)
+    },
+    previewImgAdd(item) {
+      //请求预览加一
+      previewImgAdd(item.id)
     },
     closePreview() {
       this.showPreView = false
@@ -144,6 +153,7 @@ export default {
         this.preview.index--
       }
       this.preview.img = this.pics[this.preview.index].imgUrl
+      this.previewImgAdd(this.pics[this.preview.index])
     },
     next(e) {
       e.stopPropagation()
@@ -153,6 +163,7 @@ export default {
         this.preview.index++
       }
       this.preview.img = this.pics[this.preview.index].imgUrl
+      this.previewImgAdd(this.pics[this.preview.index])
     },
     waterFall(cols) {
       const boxes = this.$refs.box
@@ -211,9 +222,11 @@ export default {
       //   JSON.stringify([...JSON.parse(localStorage.getItem('downloadFiles')), item.img])
       // )
     },
-    downloadImg(e, i) {
+    async downloadImg(e, i) {
       e.stopPropagation()
       saveFileWithA(imgToBase64(this.pics[i].imgUrl), 'vein' + Date.now())
+      //发请求处理下载
+      downloadsImgAdd(this.pics[i].id)
     },
     imgLoad(img) {
       return new Promise((resolve) => {
@@ -223,13 +236,13 @@ export default {
       })
     },
     dragStart(e, i) {
+      console.log(e.target)
       dragJS.dragStart(e)
-      console.log(e.target.src)
-      this.pics.forEach((item) => {
-        if (item.imgUrl === e.target.src) {
-          this.sendStoreIndex(item.id)
-        }
-      })
+      // this.pics.forEach((item) => {
+      //   if (item.imgUrl === e.target.src) {
+      //     this.sendStoreIndex(item.id)
+      //   }
+      // })
       this.dragItemIndex = i
     },
     drop(e, i) {
@@ -345,12 +358,28 @@ img {
   height: 50px;
   align-items: center;
   justify-content: space-between;
-  display: none;
+  display: flex;
 
   .icon-box {
     font-size: 22px;
     width: 40px;
     height: 40px;
+  }
+  .userInfo {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-left: 20px;
+      margin-bottom: 30px;
+    }
+    .uploader {
+      font-weight: 700;
+      color: rgb(34, 34, 34);
+    }
   }
 }
 .icon-shoucang1,

@@ -117,9 +117,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-body {
-  overflow: hidden;
-}
 #store-index {
   h1 {
     color: #3bc66f;
