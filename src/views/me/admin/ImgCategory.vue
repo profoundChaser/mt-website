@@ -16,8 +16,12 @@
         @handleIndexChange="handleIndexChange"
         :handleSelectionChange="handleSelectionChange"
         :pageInfo="pageInfo"
+        :rowClick="tableRowClick"
       >
         <template slot-scope="scope" slot="slotColumn">
+          <div v-if="scope.column.prop == 'imgCover'">
+            <img :src="scope.row.imgCover" alt="" style="height: 60px" />
+          </div>
           <div v-if="scope.column.prop == 'operate'">
             <i class="el-icon-edit" style="color: #e6a23c" @click="handleUpdateClick"></i>
             <i class="el-icon-delete ml20" style="color: #f56c6c" @click="handleDeleteClick"></i>
@@ -25,29 +29,37 @@
         </template>
       </Table>
     </el-row>
+    <!-- 预览图片 -->
+    <PreviewImage
+      :preview="preview"
+      :previewVisible="previewVisible"
+      :images="[]"
+      propName="imgUrl"
+      :closePreview="closePreview"
+    ></PreviewImage>
     <!-- 新增角色 -->
-    <el-dialog :visible.sync="addDialogVisible" title="新增角色" width="50%">
+    <el-dialog :visible.sync="addDialogVisible" title="新增分类" width="50%">
       <el-form
-        :model="role"
+        :model="category"
         status-icon
-        :rules="addRoleRules"
-        ref="addRole"
+        :rules="addCategoryRules"
+        ref="addCategory"
         label-width="100px"
-        class="addRole"
+        class="addCategory"
         label-position="left"
       >
-        <el-form-item label="角色名" prop="roleName">
-          <el-input type="email" v-model="role.roleName" autocomplete="off"></el-input>
+        <el-form-item label="分类名" prop="name">
+          <el-input type="text" v-model="category.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="描述" prop="roleDescribe">
-          <el-input type="text" v-model="role.roleDescribe" autocomplete="off"></el-input>
+        <el-form-item label="描述" prop="categoryDescribe">
+          <el-input type="text" v-model="category.nameInEn" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="operateBar">
-            <el-button type="success" id="register-btn" @click="addRoleSubmit('addRole')"
+            <el-button type="success" id="register-btn" @click="addCategorySubmit('addCategory')"
               >确认</el-button
             >
-            <el-button type="default" id="cancel-btn" @click="addRoleCancel('addRole')"
+            <el-button type="default" id="cancel-btn" @click="addCategoryCancel('addCategory')"
               >取消</el-button
             >
           </div>
@@ -56,27 +68,33 @@
     </el-dialog>
     <!-- 修改角色 -->
     <!-- 新增角色 -->
-    <el-dialog :visible.sync="updateDialogVisible" title="修改角色" width="50%">
+    <el-dialog :visible.sync="updateDialogVisible" title="修改分类" width="50%">
       <el-form
-        :model="updateRole"
+        :model="updateCategory"
         status-icon
-        :rules="updateRoleRules"
-        ref="updateRole"
+        :rules="updateCategoryRules"
+        ref="updateCategory"
         label-width="100px"
         label-position="left"
       >
         <el-form-item label="角色名" prop="roleName">
-          <el-input type="email" v-model="updateRole.roleName" disabled></el-input>
+          <el-input type="email" v-model="updateCategory.name"></el-input>
         </el-form-item>
-        <el-form-item label="描述" prop="roleDescribe">
-          <el-input type="text" v-model="updateRole.roleDescribe" autocomplete="off"></el-input>
+        <el-form-item label="英文路描述" prop="roleDescribe">
+          <el-input type="text" v-model="updateCategory.nameInEn" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="operateBar">
-            <el-button type="success" id="register-btn" @click="updateRoleSubmit('updateRole')"
+            <el-button
+              type="success"
+              id="register-btn"
+              @click="updateCategorySubmit('updateCategory')"
               >确认</el-button
             >
-            <el-button type="default" id="cancel-btn" @click="updateRoleCancel('updateRole')"
+            <el-button
+              type="default"
+              id="cancel-btn"
+              @click="updateCategoryCancel('updateCategory')"
               >取消</el-button
             >
           </div>
@@ -93,21 +111,32 @@ import BtnList from '@/components/common/Button/BtnList.vue'
 import Input from '@/components/common/input/Input.vue'
 import SearchBar from '@/components/common/searchBar/SearchBar.vue'
 import Select from '@/components/common/input/Select.vue'
-import { addRole, getAllRoles, updateRole, deleteRole, deleteRoles } from '@/api/role'
-import handleRes from '@/utils/res'
+import {
+  addCategory,
+  getAllCategories,
+  updateCategory,
+  deleteCategory,
+  deleteCategories,
+} from '@/api/category'
+import PreviewImage from '@/components/preview/PreviewImage.vue'
 export default {
-  components: { Card, Input, BtnList, SearchBar, Table, Select },
+  components: { Card, Input, BtnList, SearchBar, Table, Select, PreviewImage },
   data() {
     return {
       tableData: [],
       columns: [
         {
-          prop: 'roleName',
-          label: '角色',
+          prop: 'name',
+          label: '分类名',
         },
         {
-          prop: 'roleDescribe',
-          label: '描述',
+          prop: 'nameInEn',
+          label: '英文路径名',
+        },
+        {
+          prop: 'imgCover',
+          label: '封面',
+          slot: true,
         },
         {
           prop: 'operate',
@@ -115,49 +144,64 @@ export default {
           slot: true,
         },
       ],
+      // 预览
+      preview: {
+        index: 0,
+        img: null,
+      },
       //分页
       pageInfo: {
         pageTotal: 0,
-        pageSize: 8,
+        pageSize: 5,
         pageIndex: 1,
       },
       singleSelectFlag: false,
       multipleSelectFlag: false,
       btnList: [],
-      selectRole: [],
+      selectCategories: [],
       addDialogVisible: false,
-      role: {
-        roleName: '',
-        roleDescribe: '',
+      category: {
+        name: '',
+        nameInEn: '',
       },
-      addRoleRules: {
-        roleName: [{ required: true, message: '角色名不能为空', trigger: 'blur' }],
-        roleDescribe: [{ required: true, message: '描述不能为空', trigger: 'blur' }],
+      addCategoryRules: {
+        name: [{ required: true, message: '分类名不能为空', trigger: 'blur' }],
+        nameInEn: [{ required: true, message: '描述不能为空', trigger: 'blur' }],
       },
       updateDialogVisible: false,
-      updateRole: {
-        roleName: '',
-        roleDescribe: '',
+      updateCategory: {
+        name: '',
+        nameInEn: '',
       },
-      updateRoleId: null,
-      updateRoleRules: {
-        roleDescribe: [{ required: true, message: '描述不能为空', trigger: 'blur' }],
+      updateCategoryId: null,
+      updateCategoryRules: {
+        name: [{ required: true, message: '分类名不能为空', trigger: 'blur' }],
+        nameInEn: [{ required: true, message: '描述不能为空', trigger: 'blur' }],
       },
-      deleteRoleId: null,
-      deleteRoleIdList: [],
+      deleteCategoryId: null,
+      deleteCategoryIdList: [],
+      previewVisible: false,
     }
   },
   methods: {
-    async getRoleList() {
-      const res = await getAllRoles({
+    async getCategoryList() {
+      const res = await getAllCategories({
         params: {
           pageSize: this.pageInfo.pageSize,
           pageIndex: this.pageInfo.pageIndex,
         },
       })
       if (res.status !== 200) return
-      this.tableData = res.data.roles
+      this.tableData = res.data.categories
       this.pageInfo.pageTotal = res.data.count
+    },
+    tableRowClick(row, col) {
+      this.preview.img = row.imgCover
+      this.previewVisible = true
+    },
+    //关闭预览
+    closePreview() {
+      this.previewVisible = false
     },
     //选择框
     handleSelectionChange(selectArr) {
@@ -175,7 +219,7 @@ export default {
         this.singleSelectFlag = false
         this.multipleSelectFlag = false
       }
-      this.selectRoles = selectArr
+      this.selectCategorys = selectArr
       //重新渲染button
       this.initBtnList()
     },
@@ -214,61 +258,61 @@ export default {
     //分页大小
     handleSizeChange(size) {
       this.pageInfo.pageSize = size
-      this.getRoleList()
+      this.getCategoryList()
     },
     //分页页数
     handleIndexChange(index) {
       this.pageInfo.pageIndex = index
-      this.getRoleList()
+      this.getCategoryList()
     },
     handleAddClick() {
       this.addDialogVisible = true
     },
-    addRoleSubmit(formName) {
+    addCategorySubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.addRole()
+          this.addCategory()
           this.addDialogVisible = false
         } else {
           return false
         }
       })
     },
-    async addRole() {
-      const res = await addRole(this.role)
+    async addCategory() {
+      const res = await addCategory(this.role)
       if (res.status !== 200) return this.$message.error(res.msg)
       this.$message.success(res.msg)
-      this.getRoleList()
+      this.getCategoryList()
     },
-    addRoleCancel(formName) {
+    addCategoryCancel(formName) {
       this.addDialogVisible = false
       this.$refs[formName].resetFields()
     },
     handleUpdateClick() {
       this.updateDialogVisible = true
-      this.updateRole.roleName = this.selectRoles[0].roleName
-      this.updateRole.roleDescribe = this.selectRoles[0].roleDescribe
-      this.updateRoleId = this.selectRoles[0].id
+      this.updateCategory.name = this.selectCategories[0].name
+      this.updateCategory.nameInEn = this.selectCategories[0].nameInEn
+      this.updateCategoryId = this.selectCategories[0].id
     },
-    updateRoleSubmit(formName) {
+    updateCategorySubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.updateRoleAjax()
+          this.updateCategoryAjax()
           this.updateDialogVisible = false
         } else {
           return false
         }
       })
     },
-    updateRoleCancel(formName) {
+    updateCategoryCancel(formName) {
       this.updateDialogVisible = false
       this.$refs[formName].resetFields()
     },
-    async updateRoleAjax() {
-      const res = await updateRole({ id: this.updateRoleId, role: this.updateRole })
+    async updateCategoryAjax() {
+      const res = await updateCategory({ id: this.updateCategoryId, role: this.updateCategory })
       if (res.status !== 200) return this.$message.error(res.msg)
       this.$message.success(res.msg)
-      this.getRoleList()
+      this.getCategoryList()
     },
     async handleDeleteClick() {
       const confirmResult = await this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
@@ -277,33 +321,33 @@ export default {
         type: 'warning',
       }).catch((err) => err)
       if (confirmResult !== 'confirm') return this.$message.info('已取消删除')
-      if (this.selectRoles.length === 1) {
-        this.deleteRoleId = this.selectRoles[0].id
-        this.deleteRole()
+      if (this.selectCategories.length === 1) {
+        this.deleteCategoryId = this.selectCategories[0].id
+        this.deleteCategory()
       } else {
-        this.deleteRoles()
+        this.deleteCategories()
       }
-      this.getRoleList()
+      this.getCategoryList()
     },
-    async deleteRole() {
-      const res = await deleteRole(this.deleteRoleId)
+    async deleteCategory() {
+      const res = await deleteCategory(this.deleteCategoryId)
       if (res.status !== 200) return this.$message.error(res.msg)
       this.$message.success(res.msg)
-      this.getRoleList()
+      this.getCategoryList()
     },
-    async deleteRoles() {
+    async deleteCategories() {
       let idList = []
-      this.selectRoles.forEach((role) => {
+      this.selectCategories.forEach((role) => {
         idList.push(role.id)
       })
-      const res = await deleteRoles({ idList })
+      const res = await deleteCategories({ idList })
       if (res.status !== 200) return this.$message.error(res.msg)
       this.$message.success(res.msg)
-      this.getRoleList()
+      this.getCategoryList()
     },
   },
   created() {
-    this.getRoleList()
+    this.getCategoryList()
     this.initBtnList()
   },
 }

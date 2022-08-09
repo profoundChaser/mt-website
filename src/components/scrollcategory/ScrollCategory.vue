@@ -64,7 +64,7 @@ export default {
     async getAllCategories() {
       const res = await getAllCategories()
       if (res.status !== 200) return
-      this.scrollImgs = res.data.rows
+      this.scrollImgs = res.data.categories
     },
     initDomInfo() {
       this.scrollBox = this.$refs.scrollBox
