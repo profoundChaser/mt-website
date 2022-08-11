@@ -150,11 +150,10 @@ export default {
       this.showPwdV = false
       this.showEditV = false
     },
-    //编辑用户
     async editUserInfo() {
       const res = await updateUserInfo({
         id: this.user.id,
-        info: this.editUser,
+        user: this.editUser,
       })
       if (res.status !== 200) return this.$message.error(res.msg)
       this.$message.success(res.msg)
@@ -180,9 +179,6 @@ export default {
   .username {
     font-size: 24px;
     color: rgb(99, 99, 99);
-
-    &:hover {
-    }
   }
   #userInfo {
     width: 100%;

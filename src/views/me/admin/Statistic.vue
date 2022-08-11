@@ -41,7 +41,6 @@
 <script>
 import BtnList from '@/components/common/Button/BtnList.vue'
 import LineChart from '../../../components/echarts/LineChart.vue'
-import { getAllCategories } from '@/api/category'
 import { getCountInfo, getImageByTime } from '@/api/image'
 import PieChart from '../../../components/echarts/PieChart.vue'
 import LineChart2 from '../../../components/echarts/LineChart2.vue'
@@ -50,9 +49,9 @@ import {
   getPreMonthLastDay,
   getCurMonthFirstDay,
   getDates,
-  getTodayStart,
-  getPast7daysStart,
-  getPast15daysStart,
+  getPast7daysEnd,
+  getTodayEnd,
+  getPast15daysEnd,
 } from '@/utils/time.js'
 export default {
   components: { BtnList, LineChart, PieChart, LineChart2 },
@@ -139,11 +138,11 @@ export default {
     //检测选择的时间范围
     checkTimeRange(e) {
       const val = e.target.innerHTML
-      this.endDate = getTodayStart()
+      this.endDate = getTodayEnd()
       if (val === '7天') {
-        this.startDate = getPast7daysStart()
+        this.startDate = getPast7daysEnd() + 1
       } else if (val === '15天') {
-        this.startDate = getPast15daysStart()
+        this.startDate = getPast15daysEnd() + 1
       } else if (val === '本月') {
         this.startDate = new Date(getCurMonthFirstDay()).getTime()
       } else {
@@ -222,8 +221,12 @@ export default {
   created() {
     this.initBtnList()
     this.getCountInfo()
-    this.startDate = getPast7daysStart()
-    this.endDate = getTodayStart()
+    this.startDate = getPast7daysEnd() + 1
+    this.endDate = getTodayEnd()
+    console.log(
+      this.$dayjs(this.startDate).format('YYYY-MM-DD HH:mm:ss'),
+      this.$dayjs(this.endDate).format('YYYY-MM-DD HH:mm:ss')
+    )
     this.createTimeZoom()
   },
   mounted() {
