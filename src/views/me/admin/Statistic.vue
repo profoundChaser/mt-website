@@ -167,6 +167,7 @@ export default {
     selectTime() {
       this.startDate = new Date(this.timeVal[0]).getTime()
       this.endDate = new Date(this.timeVal[1]).getTime()
+      this.createTimeZoom()
       this.getImageByTime()
     },
     //切换深色模式

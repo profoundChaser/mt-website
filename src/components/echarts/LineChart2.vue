@@ -20,6 +20,10 @@ export default {
           feature: {
             mark: { show: true },
             saveAsImage: { show: true },
+            magicType: {
+              //动态类型切换
+              type: ['bar', 'line'],
+            },
           },
         },
         xAxis: {
@@ -103,14 +107,24 @@ export default {
         },
         series: [
           {
-            name: 'Fake Data',
+            name: 'data',
             type: 'line',
             smooth: true,
             symbol: 'circle',
             symbolSize: 5,
             sampling: 'average',
+            //切换到Bar时生效
+            barWidth: '20%',
             itemStyle: {
-              color: '#0770FF',
+              // #0770FF
+              color: '',
+              barBorderRadius: [10, 10, 0, 0],
+              label: {
+                shadowBlur: 3,
+              },
+            },
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)',
             },
             stack: 'a',
             areaStyle: {
