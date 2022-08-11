@@ -23,6 +23,9 @@ import store from './store/index'
 const echarts=require('echarts')
 Vue.prototype.$echarts=echarts
 
+//引入时间
+var dayjs = require('dayjs')
+Vue.prototype.$dayjs=dayjs
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 new Vue({

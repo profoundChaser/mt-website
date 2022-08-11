@@ -32,7 +32,9 @@ import {
     Table,
     TableColumn,
     Pagination,
-    MessageBox
+    MessageBox,
+    Switch,
+    DatePicker
 } from "element-ui";
 
 Vue.use(Button)
@@ -65,6 +67,8 @@ Vue.use(Button)
     .use(Table)
     .use(TableColumn)
     .use(Pagination)
+    .use(Switch)
+    .use(DatePicker)
     .use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message=Message

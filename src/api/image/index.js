@@ -27,10 +27,14 @@ export function previewImgAdd(id) {
   return request.post('/previewAdd', { id })
 }
 
-export function downloadsImgAdd(id){
+export function downloadsImgAdd(id) {
   return request.post('/downloadsAdd', { id })
 }
 
-export function getCountInfo(){
+export function getCountInfo() {
   return request.get('/countInfo')
+}
+
+export function getImageByTime(params) {
+  return request.post('/getImageByTime', params)
 }
