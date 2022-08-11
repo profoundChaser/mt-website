@@ -31,7 +31,7 @@
       </el-aside>
       <el-main>
         <keep-alive>
-          <router-view></router-view>
+          <router-view class="router-view"></router-view>
         </keep-alive>
       </el-main>
     </el-container>
@@ -96,7 +96,7 @@ export default {
         },
         {
           id: 8,
-          name: '用户浏览下载统计',
+          name: '统计分析',
           path: '/me/statistics',
           icon: 'icon-tubiao',
         },
@@ -147,6 +147,26 @@ export default {
         color: #fff;
       }
     }
+  }
+}
+
+body {
+  overflow: hidden;
+}
+
+::-webkit-scrollbar{
+  width:0px;
+}
+
+.el-main{
+  height: calc(100vh - 66px);
+  overflow: hidden;
+
+  .router-view{
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+    overflow: auto;
+    overflow-x:hidden;
   }
 }
 </style>
