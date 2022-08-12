@@ -63,7 +63,6 @@ export default {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'))
       const res = await getAllStores(userInfo.id)
       if (res.status !== 200) return
-      console.log(res.data)
       this.readyPics = res.data
     },
     dragStart(e, i) {

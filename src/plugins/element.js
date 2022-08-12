@@ -73,3 +73,4 @@ Vue.use(Button)
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message=Message
 Vue.prototype.$confirm=MessageBox.confirm
+Vue.prototype.$showMsgBox=MessageBox.showMsgBox

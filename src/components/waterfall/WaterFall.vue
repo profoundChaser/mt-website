@@ -296,7 +296,7 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
-  clear: both;
+   clear: both;
 }
 .img-box {
   position: absolute;
