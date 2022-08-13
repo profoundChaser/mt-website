@@ -1,5 +1,12 @@
 <template>
   <div id="imgs-index">
+    <!-- <div class="img-zoom">
+      <div class="img-gallery">
+        <div class="img-box" v-for="item in galleryImgs" :key="item.id">
+          <img :src="item.imgUrl" alt="火热图片" />
+        </div>
+      </div>
+    </div> -->
     <TextContent :title="textContent.title" :content="textContent.content"></TextContent>
     <section class="scroll-category">
       <h4>流行分类</h4>
@@ -21,7 +28,7 @@
 import TextContent from '@/components/textcontent/TextContent.vue'
 import ScrollCategory from '@/components/scrollcategory/ScrollCategory.vue'
 import WaterFall from '@/components/waterfall/WaterFall.vue'
-import { getAllImages } from '@/api/image'
+import { getAllImages, getHotImages } from '@/api/image'
 export default {
   components: { TextContent, ScrollCategory, WaterFall },
   data() {
@@ -34,6 +41,7 @@ export default {
       readyPics: [],
       nameInEn: 'mv',
       allPics: [],
+      galleryImgs: [],
     }
   },
   methods: {
@@ -48,6 +56,11 @@ export default {
       this.allPics = res.data.imgsArr
       this.alterReadyPics()
     },
+    async getHotImages() {
+      const res = await getHotImages()
+      if (res.status !== 200) return
+      this.galleryImgs = res.data
+    },
     alterReadyPics() {
       this.readyPics = this.allPics.filter((item) => {
         return item.category_nameInEn === this.nameInEn
@@ -56,6 +69,7 @@ export default {
   },
   created() {
     this.getAllImages()
+    // this.getHotImages()  
   },
   mounted() {},
 }
@@ -68,6 +82,26 @@ export default {
   font-size: 1.125rem;
   section {
     margin-top: 80px;
+  }
+}
+.img-zoom {
+  width: 100%;
+  overflow: hidden;
+  overflow-x: auto;
+  background: rgba(0, 0, 0, 0.4);
+  .img-gallery {
+    display: flex;
+    cursor: move;
+    .img-box {
+      width: 25%;
+      min-width: 25%;
+      height: 180px;
+      overflow: hidden;
+      border: 5px solid #fff;
+      img {
+        width: 100%;
+      }
+    }
   }
 }
 </style>

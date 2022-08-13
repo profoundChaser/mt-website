@@ -16,7 +16,11 @@ export function updateImage(id, params) {
 
 //删除图片
 export function deleteImage(params) {
-  return request.post('/updateImage', params)
+  return request.post('/deleteImage', params)
+}
+
+export function deleteImages(params) {
+  return request.post('/deleteImages', params)
 }
 
 export function getRandomImage() {
@@ -37,4 +41,8 @@ export function getCountInfo() {
 
 export function getImageByTime(params) {
   return request.post('/getImageByTime', params)
+}
+
+export function getHotImages() {
+  return request.get('/hotImages')
 }

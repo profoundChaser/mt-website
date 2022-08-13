@@ -64,8 +64,8 @@ export default {
         },
         {
           id: 3,
-          name: '我的评论',
-          path: '/me/comments',
+          name: '我的动态',
+          path: '/me/dynamic',
           icon: 'icon-dongtai01',
         },
       ],

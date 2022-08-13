@@ -63,8 +63,8 @@
         :rowClick="tableRowClick"
       >
         <template slot-scope="scope" slot="slotColumn">
-          <el-table-column v-if="scope.row.imgName">
-            {{ scope }}
+          <el-table-column v-if="scope.column.prop=='imgUrl'">
+          <!-- <img :src="scope.row.imgUrl" alt="图片资源" style="height:60px;" v-if="scope.rowIndex==0"> -->
           </el-table-column>
         </template>
       </Table>
@@ -119,7 +119,7 @@ import BtnList from '@/components/common/Button/BtnList.vue'
 import Input from '@/components/common/input/Input.vue'
 import SearchBar from '@/components/common/searchBar/SearchBar.vue'
 import Select from '@/components/common/input/Select.vue'
-import { deleteImage, getAllImages, updateImage } from '@/api/image'
+import { deleteImage, deleteImages, getAllImages, updateImage } from '@/api/image'
 import { getAllCategories } from '@/api/category'
 import { queryWidthBlur, queryWidthExact } from '@/utils/utils'
 import Dialog from '@/components/common/dialog/Dialog.vue'
@@ -146,6 +146,7 @@ export default {
           prop: 'imgUrl',
           label: '资源',
           width: '440',
+          // slot:true
         },
         {
           prop: 'uploader',
@@ -154,13 +155,11 @@ export default {
         {
           prop: 'views',
           label: '被浏览次数',
-          // slot: true,
           sortable: true,
         },
         {
           prop: 'downloads',
           label: '被下载次数',
-          // slot: true,
           sortable: true,
         },
         {
@@ -409,11 +408,26 @@ export default {
       if (this.selectImages.length === 1) {
         this.deleteImageId = this.selectImages[0].id
         this.deleteImageUrl = this.selectImages[0].imgUrl
+        this.deleteImage()
+      } else {
+        this.deleteImages()
       }
-      this.deleteImage()
     },
     async deleteImage() {
       const res = await deleteImage({ id: this.deleteImageId, url: this.deleteImageUrl })
+      if (res.status !== 200) return
+      this.$message.success(res.msg)
+      this.getAllImages()
+    },
+    async deleteImages() {
+      const idList = []
+      const urlList = []
+      this.selectImages.forEach((item) => {
+        idList.push(item.id)
+        urlList.push(item.imgUrl)
+      })
+      const res = await deleteImages({ idList, urlList })
+      console.log(res)
       if (res.status !== 200) return
       this.$message.success(res.msg)
       this.getAllImages()
@@ -431,5 +445,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
