@@ -4,6 +4,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import nProgress from 'nprogress'
 import Login from '../views/login/Login.vue'
+import vue from '../main'
 NProgress.configure({ showSpinner: false })
 const imgRouter = ['mv', 'scenery']
 const router = new VueRouter({
@@ -42,6 +43,7 @@ const router = new VueRouter({
       name: 'me',
       meta: {
         title: '我的',
+        token: true,
       },
       component: () => import('../views/me/Me.vue'),
       redirect: '/me/info',
@@ -57,6 +59,7 @@ const router = new VueRouter({
           path: '/me/info',
           meta: {
             title: '个人信息',
+            token: true,
           },
           component: () => import('../views/me/child/userInfo/Index.vue'),
         },
@@ -64,52 +67,67 @@ const router = new VueRouter({
           path: '/me/friends',
           meta: {
             title: '好友聊天',
+            token: true,
           },
           component: () => import('../views/me/child/friends/Chat.vue'),
         },
         {
-          path:'/me/users',
-          meta:{
-            title:'用户管理'
+          path: '/me/users',
+          meta: {
+            title: '用户管理',
+            token: true,
           },
-          component:()=>import('../views/me/admin/Users.vue')
+          component: () => import('../views/me/admin/Users.vue'),
         },
         {
-          path:'/me/roles',
-          meta:{
-            title:'角色管理'
+          path: '/me/roles',
+          meta: {
+            title: '角色管理',
+            token: true,
           },
-          component:()=>import('../views/me/admin/Roles.vue')
+          component: () => import('../views/me/admin/Roles.vue'),
         },
         {
-          path:'/me/images',
-          meta:{
-            title:'图片管理'
+          path: '/me/images',
+          meta: {
+            title: '图片管理',
+            token: true,
           },
-          component:()=>import('../views/me/admin/Images.vue')
+          component: () => import('../views/me/admin/Images.vue'),
         },
         {
-          path:'/me/imgcategories',
-          meta:{
-            title:'图片类型管理'
+          path: '/me/imgcategories',
+          meta: {
+            title: '图片类型管理',
+            token: true,
           },
-          component:()=>import('../views/me/admin/ImgCategory.vue')
+          component: () => import('../views/me/admin/ImgCategory.vue'),
         },
         {
-          path:'/me/statistics',
-          meta:{
-            title:'用户浏览下载统计'
+          path: '/me/statistics',
+          meta: {
+            title: '用户浏览下载统计',
+            token: true,
           },
-          component:()=>import('../views/me/admin/Statistic.vue')
+          component: () => import('../views/me/admin/Statistic.vue'),
         },
         {
-          path:'/me/logs',
-          meta:{
-            title:'日志管理'
+          path: '/me/logs',
+          meta: {
+            title: '日志管理',
+            token: true,
           },
-          component:()=>import('../views/me/admin/Logs.vue')
-        }
+          component: () => import('../views/me/admin/Logs.vue'),
+        },
       ],
+    },
+    {
+      path: '/community',
+      name: 'community',
+      meta: {
+        title: '社区',
+      },
+      component: () => import('../views/community/Index.vue'),
     },
     {
       path: '/onePic',
@@ -223,6 +241,7 @@ const router = new VueRouter({
       name: '/upload',
       meta: {
         title: '文件上传',
+        token: true,
       },
       component: () => import('../views/upload/Upload.vue'),
     },
@@ -236,12 +255,35 @@ const router = new VueRouter({
     },
   ],
 })
+
+function getToken() {
+  return localStorage.getItem('token')
+}
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (to.matched.length == 0) {
     router.push('/404')
   }
-  next()
+  if (to.meta.token) {
+    if (!getToken()) {
+      vue
+        .$msgBox({
+          title: '错误提示',
+          message: '亲，请先登录方可进行操作',
+          showCancelButton: false,
+        })
+        .then((val) => {
+          router.push('/login')
+        })
+        .catch(() => {
+          console.log('cancel')
+        })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 router.afterEach((to, from) => {
   document.title = to.meta.title
@@ -250,7 +292,7 @@ router.afterEach((to, from) => {
 
 //解决重复跳转报错的问题
 const originalPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push (location) {
-  return originalPush.call(this, location).catch(err => err)
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err)
 }
 export default router

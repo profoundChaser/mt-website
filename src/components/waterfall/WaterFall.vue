@@ -212,7 +212,22 @@ export default {
     //收藏
     store(e, item, i) {
       e.stopPropagation()
-      this.addStore(item)
+      const token = localStorage.getItem('token')
+      if (!token) {
+        this.$msgBox({
+          title: '错误提示',
+          message: '亲，请先登录方可进行下载和预览',
+          showCancelButton: false,
+        })
+          .then((val) => {
+            router.push('/login')
+          })
+          .catch(() => {
+            console.log('cancel')
+          })
+      } else {
+        this.addStore(item)
+      }
       // this.pics[i].isStore = !this.pics[i].isStore
       // if (this.pics[i].isStore) {
       //   this.$message.success('可右边下载按钮一起下载')
@@ -224,9 +239,24 @@ export default {
     },
     async downloadImg(e, i) {
       e.stopPropagation()
-      saveFileWithA(imgToBase64(this.pics[i].imgUrl), 'vein' + Date.now())
-      //发请求处理下载
-      downloadsImgAdd(this.pics[i].id)
+      const token = localStorage.getItem('token')
+      if (!token) {
+        this.$msgBox({
+          title: '错误提示',
+          message: '亲，请先登录方可进行下载和预览',
+          showCancelButton: false,
+        })
+          .then((val) => {
+            router.push('/login')
+          })
+          .catch(() => {
+            console.log('cancel')
+          })
+      } else {
+        saveFileWithA(imgToBase64(this.pics[i].imgUrl), 'vein' + Date.now())
+        //发请求处理下载
+        downloadsImgAdd(this.pics[i].id)
+      }
     },
     imgLoad(img) {
       return new Promise((resolve) => {
@@ -296,7 +326,7 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
-   clear: both;
+  clear: both;
 }
 .img-box {
   position: absolute;

@@ -34,7 +34,8 @@ import {
     Pagination,
     MessageBox,
     Switch,
-    DatePicker
+    DatePicker,
+    Tag
 } from "element-ui";
 
 Vue.use(Button)
@@ -69,8 +70,9 @@ Vue.use(Button)
     .use(Pagination)
     .use(Switch)
     .use(DatePicker)
+    .use(Tag)
     .use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message=Message
 Vue.prototype.$confirm=MessageBox.confirm
-Vue.prototype.$showMsgBox=MessageBox.showMsgBox
+Vue.prototype.$msgBox=MessageBox

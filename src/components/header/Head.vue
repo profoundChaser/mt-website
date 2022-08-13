@@ -57,7 +57,7 @@ export default {
         {
           id: 3,
           name: '社区',
-          path: '/comment',
+          path: '/community',
         },
       ],
       isLogin: false,
