@@ -340,7 +340,7 @@ export default {
     async getRoleList() {
       const res = await getAllRoles()
       if (res.status !== 200) return
-      this.selectOptions2 = res.data.rows
+      this.selectOptions2 = res.data.roles
     },
     //初始化按钮
     initBtnList() {
@@ -482,7 +482,7 @@ export default {
       this.updateUser.username = this.selectUsers[0].name
       this.updateUser.email = this.selectUsers[0].email
       this.updateUser.sex = this.selectUsers[0].sex === '男' ? '0' : '1'
-      this.updateUser.roleId = this.selectUsers[0].roleId
+      this.updateUser.roleId = this.selectUsers[0].roleId === 2 ? '管理员' : '用户'
       this.updateUserId = this.selectUsers[0].id
     },
     handleUpdateClick() {
@@ -501,6 +501,10 @@ export default {
           return false
         }
       })
+    },
+    updateUserCancel(formName) {
+      this.updateDialogVisible = false
+      this.$refs[formName].resetFields()
     },
     //修改请求部分
     async updateUserAjax() {
@@ -543,7 +547,6 @@ export default {
       this.selectUsers.forEach((user) => {
         idList.push(user.id)
       })
-      console.log(idList)
       const res = await deleteUsers({ idList })
       handleRes(res)
     },

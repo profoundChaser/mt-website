@@ -65,6 +65,7 @@
 
 <script>
 import { VueCropper } from 'vue-cropper'
+import { updateAvatar } from '@/api/user'
 
 export default {
   components: { VueCropper },
@@ -132,19 +133,20 @@ export default {
     },
     // 上传图片
     uploadImg() {
-      this.$refs.cropper.getCropBlob((data) => {
+      this.$refs.cropper.getCropBlob(async (data) => {
         let formData = new FormData()
-        formData.append('avatarfile', data)
-        // uploadAvatar(formData).then(response => {
-        //   if (response.code === 200) {
-        //     this.open = false;
-        //     this.options.img = process.env.VUE_APP_BASE_API + response.imgUrl;
-        //     // store.commit('SET_AVATAR', this.options.img);
-        //     this.msgSucces   s("修改成功");
-        //   }
-        //   this.visible = false;
-        // });
+        formData.append('avatar', data)
+        formData.append('id', this.user.id)
+        const res = await updateAvatar(formData)
+        const user = JSON.parse(localStorage.getItem('userInfo'))
+        user.avatar = res.data.avatar
+        localStorage.setItem('userInfo',JSON.stringify(user))
+        //呼叫更新头部
+        this.$bus.$emit('updateAvatar')
+        this.img = res.data.avatar
+        this.$forceUpdate()
         this.visible = false
+        this.open = false
       })
     },
     // 实时预览

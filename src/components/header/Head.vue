@@ -62,12 +62,8 @@ export default {
       ],
       isLogin: false,
       isLight: false,
+      userInfo:JSON.parse(localStorage.getItem('userInfo'))
     }
-  },
-  computed: {
-    userInfo() {
-      return JSON.parse(localStorage.getItem('userInfo'))
-    },
   },
   components: { Search, Tabs, Theme, Lang },
   methods: {
@@ -98,6 +94,16 @@ export default {
     //检测用户是否登录成功
     this.checkIsLogin()
     // this.setOffsetHeight(this.$refs.header.offsetHeight)
+    this.$bus.$on('updateUserInfo',()=>{
+      this.userInfo=JSON.parse(localStorage.getItem('userInfo'))
+    })
+    this.$bus.$on('updateAvatar',()=>{
+      this.userInfo=JSON.parse(localStorage.getItem('userInfo'))
+    })
+  },
+  destroyed() {
+    this.$bus.$off('updateUserInfo')
+    this.$bus.$off('updateAvatar')
   },
 }
 </script>

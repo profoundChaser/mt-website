@@ -24,6 +24,9 @@
             <!-- <i class="el-icon-edit" style="color: #e6a23c" @click="handleUpdateClick"></i>
             <i class="el-icon-delete ml20" style="color: #f56c6c" @click="handleDeleteClick"></i> -->
           </div>
+          <div v-if="scope.column.prop == 'createdAt'">
+          {{loginTime(scope.row.createdAt)}}
+          </div>
         </template>
       </Table>
     </el-row>
@@ -55,7 +58,7 @@ export default {
         },
         {
           prop: 'url',
-          label: '理由',
+          label: '路由',
         },
         {
           prop: 'method',
@@ -71,6 +74,11 @@ export default {
           label: '浏览器信息等',
           width:'400'
         },
+        {
+          prop:'createdAt',
+          label:'登录时间',
+          slot:true
+        }
       ],
       //分页
       pageInfo: {
@@ -87,6 +95,9 @@ export default {
     }
   },
   methods: {
+    loginTime(time){
+      return this.$dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+    },
     async getLogList() {
       const res = await getAllLogs({
         params: {

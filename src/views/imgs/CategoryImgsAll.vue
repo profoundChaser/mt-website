@@ -51,7 +51,11 @@ export default {
       this.alterReadyPics()
     },
     async getAllImages() {
-      const res = await getAllImages()
+      const res = await getAllImages({
+        params: {
+          useRandom: true,
+        },
+      })
       if (res.status !== 200) return
       this.allPics = res.data.imgsArr
       this.alterReadyPics()

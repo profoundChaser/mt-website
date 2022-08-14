@@ -19,12 +19,12 @@
         </section>
         <section class="waterfall-section">
           <h2>免费高分辨率Vein照片</h2>
-            <water-fall
-              :pics="readyPics.slice(0, waterFallSize)"
-              :waterFallSize="waterFallSize"
-              :readyPics="readyPics.slice(waterFallSize, readyPics.length)"
-              class="waterfall"
-            ></water-fall>
+          <water-fall
+            :pics="readyPics.slice(0, waterFallSize)"
+            :waterFallSize="waterFallSize"
+            :readyPics="readyPics.slice(waterFallSize, readyPics.length)"
+            class="waterfall"
+          ></water-fall>
         </section>
       </div>
     </main>
@@ -72,7 +72,11 @@ export default {
   },
   methods: {
     async getAllImages() {
-      const res = await getAllImages()
+      const res = await getAllImages({
+        params: {
+          useRandom: true,
+        },
+      })
       if (res.status !== 200) return
       this.readyPics = res.data.imgsArr
     },

@@ -3,13 +3,13 @@
     <h1 class="form-title">修改用户密码</h1>
     <el-form ref="user" :model="user" :rules="rules" label-width="80px" label-position="top">
       <el-form-item label="原密码" prop="old_password">
-        <el-input v-model="user.old_password" />
+        <el-input v-model="user.old_password" type="password"/>
       </el-form-item>
       <el-form-item label="新密码" prop="new_password">
-        <el-input v-model="user.new_password" />
+        <el-input v-model="user.new_password" type="password"/>
       </el-form-item>
       <el-form-item label="再次确认新密码" prop="new_password2">
-        <el-input v-model="user.new_password2" />
+        <el-input v-model="user.new_password2" type="password"/>
       </el-form-item>
       <el-form-item>
         <el-button type="success" size="medium" @click="submitForm">保存</el-button>

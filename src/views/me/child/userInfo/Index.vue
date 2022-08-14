@@ -158,6 +158,8 @@ export default {
       if (res.status !== 200) return this.$message.error(res.msg)
       this.$message.success(res.msg)
       localStorage.setItem('userInfo', JSON.stringify(res.data))
+      //通知头部更新
+      this.$bus.$emit('updateUserInfo')
       this.getUserInfo()
     },
     closeEditUserInfo() {},
