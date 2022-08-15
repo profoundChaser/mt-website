@@ -51,11 +51,12 @@ request.interceptors.response.use(
     if (hideFullScreenLoading) {
       hideFullScreenLoading()
     }
-    if (err.response.data.status === 401) {
+    const code = err.response.status
+    if (code === 401) {
       vue
         .$msgBox({
           title: '错误提示',
-          message: '您的登录信息已失效，请重新登录',
+          message: '您的token已失效，可停留在该页面，或请重新登录',
           showCancelButton: false,
         })
         .then((val) => {
@@ -64,11 +65,13 @@ request.interceptors.response.use(
         .catch(() => {
           console.log('cancel')
         })
-    } else {
+    } else if (code === 500) {
       vue.$message.error({
         type: 'error',
-        content: '系统出现错误',
+        message: '服务器出现错误',
+        showCancelButton: false,
       })
+      router.replace('/500')
     }
     return Promise.reject(err)
   }

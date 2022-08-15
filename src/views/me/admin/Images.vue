@@ -217,7 +217,6 @@ export default {
             name: this.searchContent.name,
             categoryId: this.searchContent.categoryId,
           },
-          useRandom:true
         },
       })
       if (res.status !== 200) return

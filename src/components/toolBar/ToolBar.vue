@@ -9,8 +9,7 @@
           <i class="iconfont icon-ExitFullScreen"></i>
         </div>
       </template>
-      <div class="screen-shot icon-box mt10" ref="screenShot" @click="createShot"
-      v-if="showShot">
+      <div class="screen-shot icon-box mt10" ref="screenShot" @click="createShot" v-if="showShot">
         <i class="iconfont icon-paizhao"></i>
       </div>
       <!-- <div class="icon-box mt10" @click="downloadZip">
@@ -40,14 +39,14 @@ import { downloadMoreWidthZip, ImgWithSaveFile } from '@/utils/file'
 export default {
   name: 'About',
   props: {
-    showFullScreen:{
-      type:Boolean,
-      default:true
+    showFullScreen: {
+      type: Boolean,
+      default: true,
     },
-    showShot:{
-      type:Boolean,
-      default:true,
-    }
+    showShot: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -70,6 +69,8 @@ export default {
       let scrollTop = st()
       mask.style.top = scrollTop + 'px'
       html2canvas(document.body, {
+        useCORS: true,
+        logging: false,
         y: scrollTop,
         height: window.innerHeight,
         scale: window.devicePixelRatio,
@@ -161,7 +162,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index:10002;
+  z-index: 10002;
 }
 .menuTop {
   transform: translateY(300%);

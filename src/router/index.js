@@ -253,6 +253,14 @@ const router = new VueRouter({
       },
       component: () => import('../views/error/404.vue'),
     },
+    {
+      path: '/500',
+      name: '500',
+      meta: {
+        title: '服务器错误',
+      },
+      component: () => import('../views/error/500.vue'),
+    },
   ],
 })
 

@@ -20,8 +20,8 @@ export default {
     return {
       hiddenHead: false,
       hiddenToolBar: false,
-      checkPaths: ['/login', '/register', '/onePic', '/', '/404', '/forgetPwd','/upload'],
-      checkToolbarHiddens: ['/me', '/login', '/register', '/onePic', '/', '/404', '/forgetPwd','/upload'],
+      checkPaths: ['/login', '/register', '/onePic', '/', '/404', '/forgetPwd','/upload','/500'],
+      checkToolbarHiddens: ['/me', '/login', '/register', '/onePic', '/', '/404', '/forgetPwd','/upload','/500'],
     }
   },
   watch: {
