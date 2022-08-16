@@ -63,9 +63,20 @@
         :rowClick="tableRowClick"
       >
         <template slot-scope="scope" slot="slotColumn">
-          <el-table-column v-if="scope.column.prop=='imgUrl'">
-          <!-- <img :src="scope.row.imgUrl" alt="图片资源" style="height:60px;" v-if="scope.rowIndex==0"> -->
-          </el-table-column>
+          <div v-if="scope.column.prop == 'imgUrl'">
+            <img :src="scope.row.imgUrl" alt="图片资源" style="height: 60px" />
+          </div>
+          <div v-if="scope.column.prop == 'tags'">
+            <el-tag
+              :key="tag"
+              v-for="(tag, index) in scope.row.tags"
+              :type="createRandomTags(index)"
+              :disable-transitions="false"
+              class="ml10 mt10"
+            >
+              {{ tag }}
+            </el-tag>
+          </div>
         </template>
       </Table>
     </el-row>
@@ -95,6 +106,32 @@
       >
         <el-form-item label="描述" prop="name">
           <el-input type="text" v-model.trim="updateImage.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="图片标签添加">
+          <el-tag
+            :key="tag"
+            v-for="(tag, index) in dynamicTags"
+            closable
+            :type="createRandomTags(index)"
+            :disable-transitions="false"
+            @close="handleClose(tag)"
+            class="mt10 ml10"
+          >
+            {{ tag }}
+          </el-tag>
+          <el-input
+            class="input-new-tag ml10"
+            v-if="inputVisible"
+            v-model="inputValue"
+            ref="saveTagInput"
+            size="small"
+            @keyup.enter.native="handleInputConfirm"
+            @blur="handleInputConfirm"
+          >
+          </el-input>
+          <el-button v-else class="button-new-tag ml10" size="small" @click="showInput"
+            >+ 标签</el-button
+          >
         </el-form-item>
         <el-form-item>
           <div class="operateBar">
@@ -145,8 +182,7 @@ export default {
         {
           prop: 'imgUrl',
           label: '资源',
-          width: '440',
-          // slot:true
+          slot: true,
         },
         {
           prop: 'uploader',
@@ -161,6 +197,12 @@ export default {
           prop: 'downloads',
           label: '被下载次数',
           sortable: true,
+        },
+        {
+          prop: 'tags',
+          label: '标签',
+          width: '200',
+          slot: true,
         },
         {
           prop: 'category_name',
@@ -204,6 +246,9 @@ export default {
       //删除的数据
       deleteImageId: null,
       deleteImageUrl: '',
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: '',
     }
   },
   methods: {
@@ -367,6 +412,7 @@ export default {
       this.updateImageUrl = this.selectImages[0].imgUrl
       this.updateImage.name = this.selectImages[0].imgName
       this.updateImageId = this.selectImages[0].id
+      this.dynamicTags = this.selectImages[0].tags !== null ? this.selectImages[0].tags : []
     },
     handleUpdateClick() {
       this.showUpdateDialog()
@@ -388,6 +434,8 @@ export default {
     },
     //修改请求部分
     async updateImageAjax() {
+      this.updateImage.tags=this.dynamicTags.join(' ')
+      console.log(this.updateImage.tags)
       const res = await updateImage(this.updateImageId, { image: this.updateImage })
       if (res.status !== 200) return
       this.$message.success(res.msg)
@@ -432,6 +480,30 @@ export default {
       this.$message.success(res.msg)
       this.getAllImages()
     },
+    createRandomTags(i) {
+      const types = ['success', 'primary', 'warning']
+      const n = (i + 1) % 3
+      return types[n]
+    },
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
+    },
+
+    showInput() {
+      this.inputVisible = true
+      this.$nextTick((_) => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+
+    handleInputConfirm() {
+      let inputValue = this.inputValue
+      if (inputValue) {
+        this.dynamicTags.push(inputValue)
+      }
+      this.inputVisible = false
+      this.inputValue = ''
+    },
   },
   created() {
     this.getAllImages()
@@ -445,4 +517,12 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+</style>
