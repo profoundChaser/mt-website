@@ -4,7 +4,7 @@ import vue from '../main'
 import router from '../router'
 
 const options = {
-  baseURL: 'http://localhost:8080',
+  baseURL: 'http://localhost:8080/api',
   withCredentials: true,
   timeout: 10000,
 }
