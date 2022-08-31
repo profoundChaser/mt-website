@@ -23,6 +23,33 @@ export const throttle = function (fn, ms) {
   }
 }
 
+export const throttle2 = function (fn, ms) {
+  let timer = null
+  return function () {
+    if (timer) return false
+    timer = setTimeout(() => {
+      clearTimeout(timer)
+      fn.apply(this, arguments)
+      timer = null
+    }, ms)
+  }
+}
+
+export const throttle3 = function (fn, ms) {
+  let lastTime = null
+  return (...args) => {
+    let waitTime = Date.now()
+    if (lastTime) {
+      if (waitTime - lastTime >= ms) {
+        fn.apply(this, args)
+        lastTime = waitTime
+      }
+    } else {
+      fn.apply(this, args)
+      lastTime = waitTime
+    }
+  }
+}
 //说明函数
 const resolver = (...args) => JSON.stringify(args)
 //纯函数可缓存 记忆化
@@ -151,7 +178,7 @@ export const setStore = function (type, key, val) {
   if (type === 'local') {
     localStorage.setItem(key, val)
   } else {
-    sessionStorage.setItem(ley, val)
+    sessionStorage.setItem(key, val)
   }
 }
 
@@ -159,7 +186,7 @@ export const getStore = function (type, key) {
   if (type === 'local') {
     localStorage.getItem(key)
   } else {
-    sessionStorage.getItem(ley)
+    sessionStorage.getItem(key)
   }
 }
 
