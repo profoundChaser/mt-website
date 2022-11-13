@@ -200,3 +200,17 @@ export const queryWidthExact = function (obj, prop, val) {
 export const queryWidthBlur = function (obj, prop, val) {
   return obj[prop].indexOf(val) >= 0
 }
+
+
+//获取最大值
+export const getMax = function (arr){
+  // return Math.max(...arr)
+  if(!arr.length) return 
+  let max = arr[0]
+  arr.forEach(item=>{
+    if(max < item){
+      max = item
+    }
+  })
+  return max
+}
