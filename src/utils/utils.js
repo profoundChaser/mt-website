@@ -94,36 +94,6 @@ export const getRdNum = function (min, max) {
 export const createColor = function () {
   return `rgb(${getRdNum(100, 255)}, ${getRdNum(100, 255)}, ${getRdNum(100, 255)})`
 }
-//数组转树状结构
-export const arrayToTree = function (items) {
-  const result = [] // 存放结果集
-  const itemMap = {}
-
-  // 先转成map存储
-  for (const item of items) {
-    itemMap[item.id] = {
-      ...item,
-      children: [],
-    }
-  }
-
-  for (const item of items) {
-    const id = item.id
-    const pid = item.pid
-    const treeItem = itemMap[id]
-    if (pid === 0) {
-      result.push(treeItem)
-    } else {
-      // if (!itemMap[pid]) {
-      //     itemMap[pid] = {
-      //         children: [],
-      //     }
-      // }
-      itemMap[pid].children.push(treeItem)
-    }
-  }
-  return result
-}
 
 //获取被卷去的高度
 export function st() {
@@ -173,34 +143,6 @@ export const abortForEach = (arr, cb) => {
     return error
   }
 }
-
-export const setStore = function (type, key, val) {
-  if (type === 'local') {
-    localStorage.setItem(key, val)
-  } else {
-    sessionStorage.setItem(key, val)
-  }
-}
-
-export const getStore = function (type, key) {
-  if (type === 'local') {
-    localStorage.getItem(key)
-  } else {
-    sessionStorage.getItem(key)
-  }
-}
-
-//精确查询
-export const queryWidthExact = function (obj, prop, val) {
-  console.log(obj[prop] === val, obj, prop, val)
-  return obj[prop] === val
-}
-
-//模糊查询
-export const queryWidthBlur = function (obj, prop, val) {
-  return obj[prop].indexOf(val) >= 0
-}
-
 
 //获取最大值
 export const getMax = function (arr){

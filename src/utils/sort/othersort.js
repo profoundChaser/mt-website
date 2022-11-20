@@ -95,6 +95,25 @@ const merge = (left, right) => {
   return res.concat(i >= left.length ? right.slice(j) : left.slice(i))
 }
 
-//快速排序基础 基准为三点取中法
+//希尔排序
+export function shellSort(arr) {
+  let d = arr.length
+  while (d > 1) {
+      d = d >> 1
+      for (let i = 0; i < d; i++) {
+          for (let j = i + d; j < arr.length; j++) {
+              let temp = arr[j]
+              let index = j - d;
+              while (index >= 0 && arr[index] > temp) {
+                  arr[index + d] = arr[index];
+                  index = index - d;
+              }
+              arr[index + d] = temp;
+          }
+
+      }
+  }
+  return arr
+}
 
 
